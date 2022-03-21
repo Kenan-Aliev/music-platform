@@ -9,11 +9,19 @@ import Tracks from "./views/Tracks/Tracks";
 import Registration from "./components/Registration/Registration";
 import { useSelector, useDispatch } from "react-redux";
 import { checkAuth } from "./store/actions/authActions";
+import Admin from "./views/Admin/Admin";
+import AddMusic from "./views/Admin/AddMusic/AddMusic";
+import AddAuthor from "./views/Admin/AddAuthor/AddAuthor";
+import AddGenre from "./views/Admin/AddGenre/AddGenre";
+import PlayLists from "./views/Admin/PlayLists/PlayLists";
+import User from "./views/User/User";
+import MyPlayLists from "./views/User/MyPlayLists/MyPlayLists";
 
 function App() {
   const dispatch = useDispatch();
 
   const isAuth = useSelector((s) => s.auth.login.success);
+  const isAdmin = useSelector((s) => s.auth.user.isAdmin);
 
   useEffect(() => {
     dispatch(checkAuth());
@@ -24,13 +32,35 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Main />}>
-            <Route index element={<Tracks />} />
+            <Route
+              index
+              element={<Tracks isPlayList={false} isUserTracks={false} />}
+            />
             <Route
               path="auth"
               element={isAuth ? <Navigate to="/" /> : <Auth />}
             >
               <Route path="registration" element={<Registration />} />
               <Route path="login" element={<Login />} />
+            </Route>
+            <Route
+              path="user"
+              element={isAuth ? <User /> : <Navigate to="/" />}
+            >
+              <Route
+                path="myTracks"
+                element={<Tracks isPlayList={false} isUserTracks={true} />}
+              />
+              <Route path="myPlaylists" element={<MyPlayLists />} />
+            </Route>
+            <Route
+              path="admin"
+              element={isAuth && isAdmin ? <Admin /> : <Navigate to={"/"} />}
+            >
+              <Route path="addMusic" element={<AddMusic />} />
+              <Route path="addGenre" element={<AddGenre />} />
+              <Route path="addAuthor" element={<AddAuthor />} />
+              <Route path="playlists" element={<PlayLists />} />
             </Route>
           </Route>
         </Routes>

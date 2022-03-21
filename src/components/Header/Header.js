@@ -18,11 +18,18 @@ import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../store/actions/authActions";
 
 const commonpages = ["Зарегистрироваться", "Войти"];
-const privatePages = ["Мои песни", "Мои плейлисты"];
+const userPages = ["Мои песни", "Мои плейлисты"];
+const adminPages = [
+  "Добавить исполнителя",
+  "Добавить жанр",
+  "Добавить песню",
+  "Плейлисты",
+];
 const settings = ["Главная", "Выйти"];
 
 function Header() {
   const isAuth = useSelector((s) => s.auth.login.success);
+  const isAdmin = useSelector((s) => s.auth.user.isAdmin);
   const user = useSelector((s) => s.auth.user);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -45,7 +52,29 @@ function Header() {
     setAnchorElNav(null);
   };
 
-  const privatePageClickHandler = (page) => {
+  const userPageClickHandler = (page) => {
+    if (page === "Мои песни") {
+      navigate("/user/myTracks");
+    }
+    if (page === "Мои плейлисты") {
+      navigate("/user/myPlaylists");
+    }
+    setAnchorElNav(null);
+  };
+
+  const adminPageClickHandler = (page) => {
+    if (page === "Добавить исполнителя") {
+      navigate("/admin/addAuthor");
+    }
+    if (page === "Добавить жанр") {
+      navigate("/admin/addGenre");
+    }
+    if (page === "Добавить песню") {
+      navigate("/admin/addMusic");
+    }
+    if (page === "Плейлисты") {
+      navigate("/admin/playlists");
+    }
     setAnchorElNav(null);
   };
 
@@ -56,6 +85,9 @@ function Header() {
   const handleCloseUserMenu = (setting) => {
     if (setting === "Выйти") {
       dispatch(logout());
+    }
+    if (setting === "Главная") {
+      navigate("/");
     }
     setAnchorElUser(null);
   };
@@ -105,14 +137,23 @@ function Header() {
                 }}
               >
                 {isAuth
-                  ? privatePages.map((page) => (
-                      <MenuItem
-                        key={page}
-                        onClick={() => privatePageClickHandler(page)}
-                      >
-                        <Typography textAlign="center">{page}</Typography>
-                      </MenuItem>
-                    ))
+                  ? isAdmin
+                    ? adminPages.map((page) => (
+                        <MenuItem
+                          key={page}
+                          onClick={() => adminPageClickHandler(page)}
+                        >
+                          <Typography textAlign="center">{page}</Typography>
+                        </MenuItem>
+                      ))
+                    : userPages.map((page) => (
+                        <MenuItem
+                          key={page}
+                          onClick={() => userPageClickHandler(page)}
+                        >
+                          <Typography textAlign="center">{page}</Typography>
+                        </MenuItem>
+                      ))
                   : commonpages.map((page) => (
                       <MenuItem
                         key={page}
@@ -142,15 +183,25 @@ function Header() {
               }}
             >
               {isAuth
-                ? privatePages.map((page) => (
-                    <Button
-                      key={page}
-                      onClick={() => privatePageClickHandler(page)}
-                      sx={{ my: 2, color: "white", display: "block" }}
-                    >
-                      {page}
-                    </Button>
-                  ))
+                ? isAdmin
+                  ? adminPages.map((page) => (
+                      <Button
+                        key={page}
+                        onClick={() => adminPageClickHandler(page)}
+                        sx={{ my: 2, color: "white", display: "block" }}
+                      >
+                        {page}
+                      </Button>
+                    ))
+                  : userPages.map((page) => (
+                      <Button
+                        key={page}
+                        onClick={() => userPageClickHandler(page)}
+                        sx={{ my: 2, color: "white", display: "block" }}
+                      >
+                        {page}
+                      </Button>
+                    ))
                 : commonpages.map((page) => (
                     <Button
                       key={page}

@@ -3,20 +3,26 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllTracks } from "../../store/actions/tracksAction";
 import TrackList from "./TrackList";
 import Container from "../../components/Container/Container";
-import './tracks.css'
+import "./tracks.css";
 
-function Tracks() {
+function Tracks({ isPlayList, isUserTracks }) {
   const dispatch = useDispatch();
   const tracks = useSelector((s) => s.tracks.tracks);
+  
   useEffect(() => {
-    dispatch(getAllTracks());
-  }, []);
+    if (!isPlayList && !isUserTracks) {
+      dispatch(getAllTracks());
+    }
+  }, [isPlayList, isUserTracks]);
+
   return (
     <div className="tracks">
       <Container>
-        {tracks.map((track) => {
-          return <TrackList track={track} key={track.id} />;
-        })}
+        {!isPlayList &&
+          !isUserTracks &&
+          tracks.map((track) => {
+            return <TrackList track={track} key={track.id} />;
+          })}
       </Container>
     </div>
   );

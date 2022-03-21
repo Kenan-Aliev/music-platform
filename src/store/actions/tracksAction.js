@@ -12,6 +12,7 @@ import {
   getMyTracksLoading,
   getMyTracksSuccess,
 } from "../reducers/tracksReducer";
+import { logoutSuccess } from "../reducers/authReducer";
 import apiRoutes from "../api";
 
 export const getAllTracks = () => {
@@ -37,9 +38,15 @@ export const addNewMusicToTrackList = (trackId) => {
       dispatch(addMusicToTrackListSuccess(response.data));
       toast.success(response.data.message);
     } catch (err) {
-      console.log(err);
-      dispatch(addNewTrackToTrackListFailed(err.response.data));
-      toast.error(err.response.data.message);
+      if (err.response.status === 401) {
+        dispatch(logoutSuccess(err.response.data));
+        dispatch(addNewTrackToTrackListFailed(err.response.data));
+        localStorage.removeItem("token");
+        toast.error(err.response.data.message);
+      } else {
+        dispatch(addNewTrackToTrackListFailed(err.response.data));
+        toast.error(err.response.data.message);
+      }
     }
   };
 };

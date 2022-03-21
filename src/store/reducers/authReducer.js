@@ -83,6 +83,12 @@ const authReducer = (state = initialState, action) => {
           failed: false,
           message: action.payload.message,
         },
+        logout: {
+          failed: false,
+          success: false,
+          loading: false,
+          message: "",
+        },
         token: action.payload.tokens.accessToken,
         user: action.payload.user,
       };

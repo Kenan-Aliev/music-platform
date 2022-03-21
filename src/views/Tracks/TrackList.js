@@ -34,14 +34,20 @@ function TrackList({ track }) {
         setOpenModal(!openModal);
       } else {
         toast.error(
-          "Чтобы добавить песню в вашу музыку или плейлист, вы должны быть авторизованы"
+          "Чтобы добавить песню в ваши плейлисты, вы должны быть авторизованы"
         );
       }
     } else if (
       typeof option === "string" &&
       option === "Добавить в мою музыку"
     ) {
-      dispatch(addNewMusicToTrackList(trackId));
+      if (isAuth) {
+        dispatch(addNewMusicToTrackList(trackId));
+      } else {
+        toast.error(
+          "Чтобы добавить песню в вашу музыку, вы должны быть авторизованы"
+        );
+      }
     }
   };
 

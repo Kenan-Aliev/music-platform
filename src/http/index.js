@@ -1,7 +1,5 @@
 import axios from "axios";
 import { rootApi } from "../store/api";
-import { loginSuccess, loginFailed } from "../store/reducers/authReducer";
-import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
 const $api = axios.create({
@@ -26,18 +24,14 @@ $api.interceptors.response.use(
       !error.config._isRetry
     ) {
       originalRequest._isRetry = true;
-      const dispatch = useDispatch();
       try {
         const response = await axios(`${rootApi}/token/refresh`, {
           withCredentials: true,
         });
-        dispatch(loginSuccess(response.data));
-        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("token", response.data.tokens.accessToken);
         return $api.request(originalRequest);
       } catch (err) {
-        dispatch(loginFailed(err.response.data));
-        localStorage.removeItem("token");
-        toast.error(err.response.data.message);
+        console.log("Вы не авторизованы");
       }
     }
     throw error;

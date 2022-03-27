@@ -10,9 +10,9 @@ import Registration from "./components/Registration/Registration";
 import { useSelector, useDispatch } from "react-redux";
 import { checkAuth } from "./store/actions/authActions";
 import Admin from "./views/Admin/Admin";
-import AddMusic from "./views/Admin/AddMusic/AddMusic";
-import AddAuthor from "./views/Admin/AddAuthor/AddAuthor";
-import AddGenre from "./views/Admin/AddGenre/AddGenre";
+import Musics from "./views/Admin/Musics/Musics";
+import Authors from "./views/Admin/Authors/Authors";
+import Genres from "./views/Admin/Genres/Genres";
 import PlayLists from "./views/Admin/PlayLists/PlayLists";
 import User from "./views/User/User";
 import MyPlayLists from "./views/User/MyPlayLists/MyPlayLists";
@@ -57,9 +57,9 @@ function App() {
               path="admin"
               element={isAuth && isAdmin ? <Admin /> : <Navigate to={"/"} />}
             >
-              <Route path="addMusic" element={<AddMusic />} />
-              <Route path="addGenre" element={<AddGenre />} />
-              <Route path="addAuthor" element={<AddAuthor />} />
+              <Route path="musics" element={<Musics />} />
+              <Route path="genres" element={<Genres />} />
+              <Route path="authors" element={<Authors />} />
               <Route path="playlists" element={<PlayLists />} />
             </Route>
           </Route>

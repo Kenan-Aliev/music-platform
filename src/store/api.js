@@ -12,6 +12,12 @@ const apiRoutes = {
     addMusicToTrackList: `/track/addToTrackList`,
     getMyTracks: `/track/getMyTracks`,
   },
+  admin: {
+    genres: {
+      getAll: "/genre/getAll",
+      new: "/genre/create",
+    },
+  },
 };
 
 export default apiRoutes;

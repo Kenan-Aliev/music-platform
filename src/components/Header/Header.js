@@ -19,12 +19,7 @@ import { logout } from "../../store/actions/authActions";
 
 const commonpages = ["Зарегистрироваться", "Войти"];
 const userPages = ["Мои песни", "Мои плейлисты"];
-const adminPages = [
-  "Добавить исполнителя",
-  "Добавить жанр",
-  "Добавить песню",
-  "Плейлисты",
-];
+const adminPages = ["Исполнители", "Жанры", "Песни", "Плейлисты"];
 const settings = ["Главная", "Выйти"];
 
 function Header() {
@@ -63,14 +58,14 @@ function Header() {
   };
 
   const adminPageClickHandler = (page) => {
-    if (page === "Добавить исполнителя") {
-      navigate("/admin/addAuthor");
+    if (page === "Исполнители") {
+      navigate("/admin/authors");
     }
-    if (page === "Добавить жанр") {
-      navigate("/admin/addGenre");
+    if (page === "Жанры") {
+      navigate("/admin/genres");
     }
-    if (page === "Добавить песню") {
-      navigate("/admin/addMusic");
+    if (page === "Песни") {
+      navigate("/admin/musics");
     }
     if (page === "Плейлисты") {
       navigate("/admin/playlists");

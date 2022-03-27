@@ -40,13 +40,10 @@ export const addNewMusicToTrackList = (trackId) => {
     } catch (err) {
       if (err.response.status === 401) {
         dispatch(logoutSuccess(err.response.data));
-        dispatch(addNewTrackToTrackListFailed(err.response.data));
         localStorage.removeItem("token");
-        toast.error(err.response.data.message);
-      } else {
-        dispatch(addNewTrackToTrackListFailed(err.response.data));
-        toast.error(err.response.data.message);
       }
+      dispatch(addNewTrackToTrackListFailed(err.response.data));
+      toast.error(err.response.data.message);
     }
   };
 };

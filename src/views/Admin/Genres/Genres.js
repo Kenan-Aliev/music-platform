@@ -40,6 +40,9 @@ function Genres() {
         />
         {openModal && (
           <AdminAddModal
+            isGenres={true}
+            isAuthors={false}
+            isTracks={false}
             openModal={openModal}
             handleShowModal={handleShowModal}
           />

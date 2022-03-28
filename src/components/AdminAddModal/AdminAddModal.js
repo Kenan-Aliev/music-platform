@@ -6,6 +6,7 @@ import TextField from "@mui/material/TextField";
 import Modal from "@mui/material/Modal";
 import AddIcon from "@mui/icons-material/Add";
 import { addNewGenre } from "../../store/actions/adminActions/genresActions";
+import { addNewAuthor } from "../../store/actions/adminActions/authorActions";
 
 const style = {
   position: "absolute",
@@ -24,11 +25,19 @@ const style = {
   p: 4,
 };
 
-export default function AdminAddModal({ openModal, handleShowModal }) {
+export default function AdminAddModal({
+  openModal,
+  handleShowModal,
+  isGenres,
+  isAuthors,
+  isTracks,
+}) {
   const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
   const handleClick = () => {
-    dispatch(addNewGenre(inputValue));
+    isGenres
+      ? dispatch(addNewGenre(inputValue))
+      : isAuthors && dispatch(addNewAuthor(inputValue));
     handleShowModal();
   };
   return (
@@ -41,7 +50,14 @@ export default function AdminAddModal({ openModal, handleShowModal }) {
       <Box sx={style}>
         <TextField
           id="standard-required"
-          label="Введите название жанра"
+          sx={{ width: "70%" }}
+          label={`Введите ${
+            isGenres
+              ? "название жанра"
+              : isAuthors
+              ? "имя исполнителя"
+              : "название трека"
+          }`}
           variant="standard"
           value={inputValue}
           onChange={(e) => {
@@ -49,12 +65,17 @@ export default function AdminAddModal({ openModal, handleShowModal }) {
           }}
         />
         <Button
+          sx={{ width: "70%" }}
           variant="outlined"
           startIcon={<AddIcon />}
           disabled={!inputValue || inputValue.length < 3}
           onClick={handleClick}
         >
-          Добавить жанр
+          {isAuthors
+            ? "Добавить исполнителя"
+            : isGenres
+            ? "Добавить жанр"
+            : "Добавить новый трек"}
         </Button>
       </Box>
     </Modal>

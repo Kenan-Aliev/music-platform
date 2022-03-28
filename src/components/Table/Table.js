@@ -58,6 +58,36 @@ const genreHeadCells = [
   },
 ];
 
+const authorHeadCells = [
+  {
+    id: "name",
+    numeric: false,
+    disablePadding: true,
+    label: "Имя исполнителя",
+  },
+];
+
+const songHeadCells = [
+  {
+    id: "name",
+    numeric: false,
+    disablePadding: true,
+    label: "Название песни",
+  },
+  {
+    id: "genre",
+    numeric: false,
+    disablePadding: true,
+    label: "Имя исполнителя",
+  },
+  {
+    id: "genre",
+    numeric: false,
+    disablePadding: true,
+    label: "Название жанра",
+  },
+];
+
 function EnhancedTableHead(props) {
   const {
     onSelectAllClick,
@@ -75,6 +105,14 @@ function EnhancedTableHead(props) {
     onRequestSort(event, property);
   };
 
+  const getTableHead = () => {
+    return isGenres
+      ? genreHeadCells
+      : isAuthors
+      ? authorHeadCells
+      : songHeadCells;
+  };
+
   return (
     <TableHead>
       <TableRow>
@@ -89,31 +127,30 @@ function EnhancedTableHead(props) {
             }}
           />
         </TableCell>
-        {isGenres &&
-          genreHeadCells.map((headCell) => (
-            <TableCell
-              key={headCell.id}
-              align={headCell.numeric ? "right" : "left"}
-              sx={{ fontWeight: 600 }}
-              padding={headCell.disablePadding ? "none" : "normal"}
-              sortDirection={orderBy === headCell.id ? order : false}
+        {getTableHead().map((headCell) => (
+          <TableCell
+            key={headCell.id}
+            align={headCell.numeric ? "right" : "left"}
+            sx={{ fontWeight: 600 }}
+            padding={headCell.disablePadding ? "none" : "normal"}
+            sortDirection={orderBy === headCell.id ? order : false}
+          >
+            <TableSortLabel
+              active={orderBy === headCell.id}
+              direction={orderBy === headCell.id ? order : "asc"}
+              onClick={createSortHandler(headCell.id)}
             >
-              <TableSortLabel
-                active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : "asc"}
-                onClick={createSortHandler(headCell.id)}
-              >
-                {headCell.label}
-                {orderBy === headCell.id ? (
-                  <Box component="span" sx={visuallyHidden}>
-                    {order === "desc"
-                      ? "отсортировано по убыванию"
-                      : "отсортировано по возрастанию"}
-                  </Box>
-                ) : null}
-              </TableSortLabel>
-            </TableCell>
-          ))}
+              {headCell.label}
+              {orderBy === headCell.id ? (
+                <Box component="span" sx={visuallyHidden}>
+                  {order === "desc"
+                    ? "отсортировано по убыванию"
+                    : "отсортировано по возрастанию"}
+                </Box>
+              ) : null}
+            </TableSortLabel>
+          </TableCell>
+        ))}
       </TableRow>
     </TableHead>
   );

@@ -17,6 +17,10 @@ const apiRoutes = {
       getAll: "/genre/getAll",
       new: "/genre/create",
     },
+    authors: {
+      getAll: "/author/getAll",
+      new: "/author/create",
+    },
   },
 };
 

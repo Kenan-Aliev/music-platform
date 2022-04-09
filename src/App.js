@@ -10,10 +10,7 @@ import Registration from "./components/Registration/Registration";
 import { useSelector, useDispatch } from "react-redux";
 import { checkAuth } from "./store/actions/authActions";
 import Admin from "./views/Admin/Admin";
-import Musics from "./views/Admin/Musics/Musics";
-import Authors from "./views/Admin/Authors/Authors";
-import Genres from "./views/Admin/Genres/Genres";
-import PlayLists from "./views/Admin/PlayLists/PlayLists";
+import EditPage from './views/Admin/EditPage/EditPage';
 import User from "./views/User/User";
 import MyPlayLists from "./views/User/MyPlayLists/MyPlayLists";
 
@@ -57,10 +54,54 @@ function App() {
               path="admin"
               element={isAuth && isAdmin ? <Admin /> : <Navigate to={"/"} />}
             >
-              <Route path="musics" element={<Musics />} />
-              <Route path="genres" element={<Genres />} />
-              <Route path="authors" element={<Authors />} />
-              <Route path="playlists" element={<PlayLists />} />
+              <Route
+                path="musics"
+                element={
+                  <EditPage
+                    title={"Песни"}
+                    isGenres={false}
+                    isPlayLists={false}
+                    isAuthors={false}
+                    isTracks={true}
+                  />
+                }
+              />
+              <Route
+                path="genres"
+                element={
+                  <EditPage
+                    title={"Жанры"}
+                    isGenres={true}
+                    isPlayLists={false}
+                    isAuthors={false}
+                    isTracks={false}
+                  />
+                }
+              />
+              <Route
+                path="authors"
+                element={
+                  <EditPage
+                    title={"Авторы"}
+                    isGenres={false}
+                    isPlayLists={false}
+                    isAuthors={true}
+                    isTracks={false}
+                  />
+                }
+              />
+              <Route
+                path="playlists"
+                element={
+                  <EditPage
+                    title={"Плейлисты"}
+                    isGenres={false}
+                    isPlayLists={true}
+                    isAuthors={false}
+                    isTracks={false}
+                  />
+                }
+              />
             </Route>
           </Route>
         </Routes>

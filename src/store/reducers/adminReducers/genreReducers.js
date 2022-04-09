@@ -4,7 +4,10 @@ const GET_ALL_GENRES_SUCCESS = "GET_ALL_GENRES_SUCCESS";
 const GET_ALL_GENRES_FAILED = "GET_ALL_GENRES_FAILED";
 const ADD_NEW_GENRE_LOADING = "ADD_NEW_GENRE_LOADING";
 const ADD_NEW_GENRE_SUCCESS = "ADD_NEW_GENRE_SUCCESS";
-const ADD_NEW_GENRE_FAILED = "ADD_NEW_GENRE_FAILED  ";
+const ADD_NEW_GENRE_FAILED = "ADD_NEW_GENRE_FAILED";
+const DELETE_GENRE_FAILED = "DELETE_GENRE_FAILED";
+const DELETE_GENRE_SUCCESS = "DELETE_GENRE_SUCCESS";
+const DELETE_GENRE_LOADING = "DELETE_GENRE_LOADING";
 
 const initialState = {
   getAllGenres: {
@@ -14,6 +17,12 @@ const initialState = {
     message: "",
   },
   addNewGenre: {
+    success: false,
+    loading: false,
+    failed: false,
+    message: "",
+  },
+  deleteGenre: {
     success: false,
     loading: false,
     failed: false,
@@ -86,6 +95,37 @@ const genresReducer = (state = initialState, action) => {
           message: action.payload.message,
         },
       };
+    case DELETE_GENRE_LOADING:
+      return {
+        ...state,
+        deleteGenre: {
+          success: false,
+          loading: true,
+          failed: false,
+          message: "",
+        },
+      };
+    case DELETE_GENRE_SUCCESS:
+      return {
+        ...state,
+        deleteGenre: {
+          success: true,
+          loading: false,
+          failed: false,
+          message: action.payload.message,
+        },
+        genres: action.payload.genres,
+      };
+    case DELETE_GENRE_FAILED:
+      return {
+        ...state,
+        deleteGenre: {
+          success: false,
+          loading: false,
+          failed: true,
+          message: action.payload.message,
+        },
+      };
     default:
       return state;
   }
@@ -114,6 +154,20 @@ export const addNewGenreSuccess = (payload) => ({
 export const addNewGenreFailed = (payload) => ({
   type: ADD_NEW_GENRE_FAILED,
   payload,
+});
+
+export const deleteGenreFailed = (payload) => ({
+  type: DELETE_GENRE_FAILED,
+  payload,
+});
+
+export const deleteGenreSuccess = (payload) => ({
+  type: DELETE_GENRE_SUCCESS,
+  payload,
+});
+
+export const deleteGenreLoading = () => ({
+  type: DELETE_GENRE_LOADING,
 });
 
 export default genresReducer;

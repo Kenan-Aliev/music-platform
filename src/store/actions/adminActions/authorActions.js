@@ -8,6 +8,9 @@ import {
   addNewAuthorFailed,
   addNewAuthorLoading,
   addNewAuthorSuccess,
+  deleteAuthorFailed,
+  deleteAuthorLoading,
+  deleteAuthorSuccess,
 } from "../../reducers/adminReducers/authorReducers";
 import { logoutSuccess } from "../../reducers/authReducer";
 
@@ -43,6 +46,26 @@ export const addNewAuthor = (author) => {
         localStorage.removeItem("token");
       }
       dispatch(addNewAuthorFailed(err.response.data));
+      toast.error(err.response.data.message);
+    }
+  };
+};
+
+export const deleteAuthors = (authors) => {
+  return async (dispatch) => {
+    dispatch(deleteAuthorLoading());
+    try {
+      const response = await $api.delete(
+        `${apiRoutes.admin.authors.delete}/${JSON.stringify(authors)}`
+      );
+      dispatch(deleteAuthorSuccess(response.data));
+      toast.success(response.data.message);
+    } catch (err) {
+      if (err.response.status === 401) {
+        dispatch(logoutSuccess(err.response.data));
+        localStorage.removeItem("token");
+      }
+      dispatch(deleteAuthorFailed(err.response.data));
       toast.error(err.response.data.message);
     }
   };

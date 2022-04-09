@@ -8,6 +8,9 @@ import {
   addNewGenreFailed,
   addNewGenreLoading,
   addNewGenreSuccess,
+  deleteGenreFailed,
+  deleteGenreLoading,
+  deleteGenreSuccess,
 } from "../../reducers/adminReducers/genreReducers";
 import { logoutSuccess } from "../../reducers/authReducer";
 
@@ -43,6 +46,26 @@ export const addNewGenre = (genre) => {
         localStorage.removeItem("token");
       }
       dispatch(addNewGenreFailed(err.response.data));
+      toast.error(err.response.data.message);
+    }
+  };
+};
+
+export const deleteGenres = (genres) => {
+  return async (dispatch) => {
+    dispatch(deleteGenreLoading());
+    try {
+      const response = await $api.delete(
+        `${apiRoutes.admin.genres.delete}/${JSON.stringify(genres)}`
+      );
+      dispatch(deleteGenreSuccess(response.data));
+      toast.success(response.data.message);
+    } catch (err) {
+      if (err.response.status === 401) {
+        dispatch(logoutSuccess(err.response.data));
+        localStorage.removeItem("token");
+      }
+      dispatch(deleteGenreFailed(err.response.data));
       toast.error(err.response.data.message);
     }
   };

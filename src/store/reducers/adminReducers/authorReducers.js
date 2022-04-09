@@ -5,6 +5,9 @@ const GET_ALL_AUTHORS_FAILED = "GET_ALL_AUTHORS_FAILED";
 const ADD_NEW_AUTHOR_FAILED = "ADD_NEW_AUTHOR_FAILED";
 const ADD_NEW_AUTHOR_SUCCESS = "ADD_NEW_AUTHOR_SUCCESS";
 const ADD_NEW_AUTHOR_LOADING = "ADD_NEW_AUTHOR_LOADING";
+const DELETE_AUTHOR_LOADING = "DELETE_AUTHOR_LOADING";
+const DELETE_AUTHOR_SUCCESS = "DELETE_AUTHOR_SUCCESS";
+const DELETE_AUTHOR_FAILED = "DELETE_AUTHOR_FAILED";
 
 const initialState = {
   getAllAuthors: {
@@ -14,6 +17,12 @@ const initialState = {
     message: "",
   },
   addNewAuthor: {
+    success: false,
+    loading: false,
+    failed: false,
+    message: "",
+  },
+  deleteAuthor: {
     success: false,
     loading: false,
     failed: false,
@@ -86,6 +95,37 @@ const authorReducer = (state = initialState, action) => {
           message: action.payload.message,
         },
       };
+    case DELETE_AUTHOR_LOADING:
+      return {
+        ...state,
+        deleteAuthor: {
+          success: false,
+          loading: true,
+          failed: false,
+          message: "",
+        },
+      };
+    case DELETE_AUTHOR_SUCCESS:
+      return {
+        ...state,
+        deleteAuthor: {
+          success: true,
+          loading: false,
+          failed: false,
+          message: action.payload.message,
+        },
+        authors: action.payload.authors,
+      };
+    case DELETE_AUTHOR_FAILED:
+      return {
+        ...state,
+        deleteAuthor: {
+          success: false,
+          loading: false,
+          failed: true,
+          message: action.payload.message,
+        },
+      };
     default:
       return state;
   }
@@ -112,6 +152,20 @@ export const addNewAuthorSuccess = (payload) => ({
 export const addNewAuthorFailed = (payload) => ({
   type: ADD_NEW_AUTHOR_FAILED,
   payload,
+});
+
+export const deleteAuthorFailed = (payload) => ({
+  type: DELETE_AUTHOR_FAILED,
+  payload,
+});
+
+export const deleteAuthorSuccess = (payload) => ({
+  type: DELETE_AUTHOR_SUCCESS,
+  payload,
+});
+
+export const deleteAuthorLoading = () => ({
+  type: DELETE_AUTHOR_LOADING,
 });
 
 export default authorReducer;

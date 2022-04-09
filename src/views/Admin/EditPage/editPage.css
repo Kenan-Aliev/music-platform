@@ -1,8 +1,8 @@
-.genres {
+.editpage {
   height: 90vh;
 }
 
-.genres .container {
+.editpage .container {
   height: 100%;
   display: flex;
   flex-direction: column;

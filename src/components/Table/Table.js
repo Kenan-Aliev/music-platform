@@ -168,6 +168,7 @@ EnhancedTableHead.propTypes = {
 const EnhancedTableToolbar = (props) => {
   const { numSelected } = props;
   const { title } = props;
+  const { handleDeleteClick } = props;
   return (
     <Toolbar
       sx={{
@@ -204,7 +205,11 @@ const EnhancedTableToolbar = (props) => {
 
       {numSelected > 0 && (
         <Tooltip title="Delete">
-          <IconButton>
+          <IconButton
+            onClick={() => {
+              handleDeleteClick();
+            }}
+          >
             <DeleteIcon />
           </IconButton>
         </Tooltip>
@@ -223,11 +228,13 @@ export default function EnhancedTable({
   isGenres,
   isPlayLists,
   isAuthors,
+  selected,
+  setSelected,
   isTracks,
+  handleShowConfirmModal,
 }) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("name");
-  const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -237,21 +244,25 @@ export default function EnhancedTable({
     setOrderBy(property);
   };
 
+  const handleDeleteClick = () => {
+    handleShowConfirmModal(selected);
+  };
+
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = data.map((n) => n.name);
+      const newSelecteds = data.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, id) => {
+    const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -275,7 +286,7 @@ export default function EnhancedTable({
     setPage(0);
   };
 
-  const isSelected = (name) => selected.indexOf(name) !== -1;
+  const isSelected = (id) => selected.indexOf(id) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -284,7 +295,11 @@ export default function EnhancedTable({
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} title={title} />
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          title={title}
+          handleDeleteClick={handleDeleteClick}
+        />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -309,13 +324,13 @@ export default function EnhancedTable({
               {stableSort(data, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                  const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={(event) => handleClick(event, row.id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}

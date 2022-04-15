@@ -75,7 +75,7 @@ const songHeadCells = [
     label: "Название песни",
   },
   {
-    id: "genre",
+    id: "author",
     numeric: false,
     disablePadding: true,
     label: "Имя исполнителя",
@@ -237,6 +237,17 @@ export default function EnhancedTable({
   const [orderBy, setOrderBy] = React.useState("name");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const ref = React.useRef();
+  ref.current = isTracks
+    ? data.map((track) => {
+        return {
+          id: track.id,
+          name: track.name,
+          genre: track.genre.name,
+          author: track.author.name,
+        };
+      })
+    : data;
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -250,7 +261,7 @@ export default function EnhancedTable({
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = data.map((n) => n.id);
+      const newSelecteds = ref.current.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
@@ -290,7 +301,7 @@ export default function EnhancedTable({
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - ref.current.length) : 0;
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -312,7 +323,7 @@ export default function EnhancedTable({
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={data.length}
+              rowCount={ref.current.length}
               isGenres={isGenres}
               isPlayLists={isPlayLists}
               isAuthors={isAuthors}
@@ -321,7 +332,7 @@ export default function EnhancedTable({
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(data, getComparator(order, orderBy))
+              {stableSort(ref.current, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
@@ -334,7 +345,7 @@ export default function EnhancedTable({
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row.id}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -354,6 +365,26 @@ export default function EnhancedTable({
                       >
                         {row.name}
                       </TableCell>
+                      {isTracks && (
+                        <>
+                          <TableCell
+                            component="th"
+                            id={labelId}
+                            scope="row"
+                            padding="none"
+                          >
+                            {row.author}
+                          </TableCell>
+                          <TableCell
+                            component="th"
+                            id={labelId}
+                            scope="row"
+                            padding="none"
+                          >
+                            {row.genre}
+                          </TableCell>
+                        </>
+                      )}
                     </TableRow>
                   );
                 })}
@@ -373,7 +404,7 @@ export default function EnhancedTable({
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
           labelRowsPerPage={"Кол-во строк на страницу"}
-          count={data.length}
+          count={ref.current.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

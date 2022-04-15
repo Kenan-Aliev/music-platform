@@ -8,6 +8,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { deleteAuthors } from "../../store/actions/adminActions/authorActions";
 import { deleteGenres } from "../../store/actions/adminActions/genresActions";
+import { deleteTracks } from "../../store/actions/adminActions/trackActions";
 
 const style = {
   position: "absolute",
@@ -39,7 +40,9 @@ export default function AdminConfirmModal({
   const handleDeleteClick = () => {
     isAuthors
       ? dispatch(deleteAuthors(selected))
-      : dispatch(deleteGenres(selected));
+      : isGenres
+      ? dispatch(deleteGenres(selected))
+      : isTracks && dispatch(deleteTracks(selected));
     handleShowConfirmModal([]);
   };
 

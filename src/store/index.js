@@ -4,6 +4,8 @@ import authReducer from "./reducers/authReducer";
 import trackReducer from "./reducers/tracksReducer";
 import genresReducer from "./reducers/adminReducers/genreReducers";
 import authorReducer from "./reducers/adminReducers/authorReducers";
+import adminTracksReducer from "./reducers/adminReducers/trackReducer";
+import userTracksReducer from "./reducers/userReducers/trackReducer";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -12,6 +14,8 @@ const rootReducer = combineReducers({
   tracks: trackReducer,
   genres: genresReducer,
   authors: authorReducer,
+  adminTracks: adminTracksReducer,
+  userTracks: userTracksReducer,
 });
 
 const store = createStore(

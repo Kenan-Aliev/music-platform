@@ -8,9 +8,7 @@ const apiRoutes = {
     logout: `${rootApi}/auth/logout`,
   },
   tracks: {
-    getALl: `${rootApi}/track/getAll`,
-    addMusicToTrackList: `/track/addToTrackList`,
-    getMyTracks: `/track/getMyTracks`,
+    getAll: `${rootApi}/track/getAll`,
   },
   admin: {
     genres: {
@@ -22,6 +20,17 @@ const apiRoutes = {
       getAll: "/author/getAll",
       new: "/author/create",
       delete: "/author/delete",
+    },
+    tracks: {
+      getAll: `${rootApi}/track/getAll`,
+      new: "/track/create",
+      delete: "/track/delete",
+    },
+  },
+  user: {
+    tracks: {
+      getAll: "/track/getMyTracks",
+      addMusicToTrackList: `/track/addToTrackList`,
     },
   },
 };

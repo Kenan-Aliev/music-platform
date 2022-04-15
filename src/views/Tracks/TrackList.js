@@ -8,13 +8,14 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Modal from "../../components/AddToPlayListModal/AddToPlayListModal";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { addNewMusicToTrackList } from "../../store/actions/tracksAction";
+import { addNewMusicToTrackList } from "../../store/actions/userActions/trackActions";
 
-const options = ["Добавить в мою музыку", "Добавить в плейлист"];
+const commonOptions = ["Добавить в мою музыку", "Добавить в плейлист"];
+const userTrackListOptions = ["Удалить из моей музыки", "Добавить в плейлист"];
 
 const ITEM_HEIGHT = 48;
 
-function TrackList({ track }) {
+function TrackList({ track, isPlayList, isUserTracks }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openModal, setOpenModal] = useState(false);
 
@@ -25,6 +26,12 @@ function TrackList({ track }) {
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
+  };
+
+  const setOptions = () => {
+    return !isPlayList && !isUserTracks
+      ? commonOptions
+      : !isPlayList && isUserTracks && userTrackListOptions;
   };
 
   const handleClose = (option, trackId) => {
@@ -48,6 +55,11 @@ function TrackList({ track }) {
           "Чтобы добавить песню в вашу музыку, вы должны быть авторизованы"
         );
       }
+    } else if (
+      typeof option === "string" &&
+      option === "Удалить из моей музыки"
+    ) {
+      
     }
   };
 
@@ -89,7 +101,7 @@ function TrackList({ track }) {
             },
           }}
         >
-          {options.map((option) => (
+          {setOptions().map((option) => (
             <MenuItem
               key={option}
               onClick={() => {

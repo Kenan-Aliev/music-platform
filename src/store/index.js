@@ -6,6 +6,7 @@ import genresReducer from "./reducers/adminReducers/genreReducers";
 import authorReducer from "./reducers/adminReducers/authorReducers";
 import adminTracksReducer from "./reducers/adminReducers/trackReducer";
 import userTracksReducer from "./reducers/userReducers/trackReducer";
+import playlistsReducer from "./reducers/userReducers/playlistReducer";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   authors: authorReducer,
   adminTracks: adminTracksReducer,
   userTracks: userTracksReducer,
+  userPlaylists: playlistsReducer,
 });
 
 const store = createStore(

@@ -16,14 +16,18 @@ function Tracks({ isPlayList, isUserTracks }) {
   };
 
   const tracks = useSelector((s) => getTracks(s));
+  console.log(tracks);
+  console.log("IsplayList=====> " + isPlayList);
+  console.log("IsUSerTracks=====> " + isUserTracks);
 
   useEffect(() => {
     if (!isPlayList && !isUserTracks) {
       dispatch(getAllTracks());
     } else if (!isPlayList && isUserTracks) {
+      console.log("getMyTracks");
       dispatch(getMyTracks());
     }
-  }, [isPlayList, isUserTracks]);
+  }, []);
 
   return (
     <div className="tracks">

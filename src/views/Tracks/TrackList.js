@@ -9,6 +9,7 @@ import Modal from "../../components/AddToPlayListModal/AddToPlayListModal";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { addNewMusicToTrackList } from "../../store/actions/userActions/trackActions";
+import { deleteTrackFromTrackList } from "../../store/actions/userActions/trackActions";
 
 const commonOptions = ["Добавить в мою музыку", "Добавить в плейлист"];
 const userTrackListOptions = ["Удалить из моей музыки", "Добавить в плейлист"];
@@ -59,7 +60,7 @@ function TrackList({ track, isPlayList, isUserTracks }) {
       typeof option === "string" &&
       option === "Удалить из моей музыки"
     ) {
-      
+      dispatch(deleteTrackFromTrackList(trackId));
     }
   };
 

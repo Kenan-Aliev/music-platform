@@ -5,6 +5,11 @@ const GET_MY_TRACKS_FAILED = "GET_MY_TRACKS_FAILED";
 const ADD_NEW_TRACK_TO_TRACKLIST_SUCCESS = "ADD_NEW_TRACK_TO_TRACKLIST_SUCCESS";
 const ADD_NEW_TRACK_TO_TRACKLIST_LOADING = "ADD_NEW_TRACK_TO_TRACKLIST_LOADING";
 const ADD_NEW_TRACK_TO_TRACKLIST_FAILED = "ADD_NEW_TRACK_TO_TRACKLIST_FAILED";
+const DELETE_TRACK_FROM_TRACKLIST_LOADING =
+  "DELETE_TRACK_FROM_TRACKLIST_LOADING";
+const DELETE_TRACK_FROM_TRACKLIST_SUCCESS =
+  "DELETE_TRACK_FROM_TRACKLIST_SUCCESS";
+const DELETE_TRACK_FROM_TRACKLIST_FAILED = "DELETE_TRACK_FROM_TRACKLIST_FAILED";
 
 const initialState = {
   getMyTracks: {
@@ -14,6 +19,12 @@ const initialState = {
     message: "",
   },
   addNewTrackToTrackList: {
+    success: false,
+    loading: false,
+    failed: false,
+    message: "",
+  },
+  deleteTrackFromTrackList: {
     success: false,
     loading: false,
     failed: false,
@@ -91,6 +102,38 @@ const userTrackReducer = (state = initialState, action) => {
         },
       };
 
+    case DELETE_TRACK_FROM_TRACKLIST_LOADING:
+      return {
+        ...state,
+        deleteTrackFromTrackList: {
+          success: false,
+          loading: true,
+          failed: false,
+          message: "",
+        },
+      };
+
+    case DELETE_TRACK_FROM_TRACKLIST_SUCCESS:
+      return {
+        ...state,
+        deleteTrackFromTrackList: {
+          success: true,
+          loading: false,
+          failed: false,
+          message: action.payload.message,
+        },
+        myTracks: action.payload.tracks,
+      };
+    case DELETE_TRACK_FROM_TRACKLIST_FAILED:
+      return {
+        ...state,
+        deleteTrackFromTrackList: {
+          success: false,
+          loading: false,
+          failed: true,
+          message: action.payload.message,
+        },
+      };
     default:
       return state;
   }
@@ -120,6 +163,20 @@ export const addMusicToTrackListSuccess = (payload) => ({
 
 export const addNewTrackToTrackListFailed = (payload) => ({
   type: ADD_NEW_TRACK_TO_TRACKLIST_FAILED,
+  payload,
+});
+
+export const deleteTrackFromTrackListLoading = () => ({
+  type: DELETE_TRACK_FROM_TRACKLIST_LOADING,
+});
+
+export const deleteTrackFromTrackListSuccess = (payload) => ({
+  type: DELETE_TRACK_FROM_TRACKLIST_SUCCESS,
+  payload,
+});
+
+export const deleteTrackFromTrackListFailed = (payload) => ({
+  type: DELETE_TRACK_FROM_TRACKLIST_FAILED,
   payload,
 });
 

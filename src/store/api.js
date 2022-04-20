@@ -31,6 +31,10 @@ const apiRoutes = {
     tracks: {
       getAll: "/track/getMyTracks",
       addMusicToTrackList: `/track/addToTrackList`,
+      deleteMusicFromTrackList: "/track/deleteTrackFromTrackList",
+    },
+    playlists: {
+      getAll: "/playlist/getMyPlaylists",
     },
   },
 };

@@ -35,8 +35,11 @@ const apiRoutes = {
     },
     playlists: {
       getAll: "/playlist/getMyPlaylists",
+      getTracks: "/playlist/getPlayListTracks",
       new: "/playlist/new",
+      newTrack: "/playlist/addTrackToPlaylists",
       delete: "/playlist/delete",
+      deleteTrack: "/playlist/deleteTrack",
     },
   },
 };

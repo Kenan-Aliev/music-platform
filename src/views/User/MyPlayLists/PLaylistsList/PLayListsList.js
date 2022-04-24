@@ -26,7 +26,7 @@ function PLayListsList({ playlist }) {
     setAnchorEl(null);
     if (typeof option === "string" && option === "Удалить плейлист") {
       dispatch(deletePlaylist(playlistId));
-    } else if (typeof option === "string" && option === "Удалить плейлист") {
+    } else if (typeof option === "string" && option === "Перейти к плейлисту") {
       navigate(`/user/myPlaylists/${playlistId}`);
     }
   };

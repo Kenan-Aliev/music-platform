@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import AlbumIcon from "@mui/icons-material/Album";
 import "./tracks.css";
 import IconButton from "@mui/material/IconButton";
@@ -11,9 +12,11 @@ import { toast } from "react-toastify";
 import { addNewMusicToTrackList } from "../../store/actions/userActions/trackActions";
 import { deleteTrackFromTrackList } from "../../store/actions/userActions/trackActions";
 import { getUserPlaylists } from "../../store/actions/userActions/playlistActions";
+import { deleteTrackFromPlaylist } from "../../store/actions/userActions/playlistActions";
 
 const commonOptions = ["Добавить в мою музыку", "Добавить в плейлист"];
 const userTrackListOptions = ["Удалить из моей музыки", "Добавить в плейлист"];
+const playlistTracksOptions = ["Удалить из плейлиста"];
 
 const ITEM_HEIGHT = 48;
 
@@ -22,16 +25,16 @@ function TrackList({ track, isPlayList, isUserTracks }) {
   const [openModal, setOpenModal] = useState(false);
 
   const dispatch = useDispatch();
-
+  const { playlistID } = useParams();
   const open = Boolean(anchorEl);
   const isAuth = useSelector((s) => s.auth.login.success);
   const userPlaylists = useSelector((s) => s.userPlaylists.userPlaylists);
 
   useEffect(() => {
-    if (isAuth) {
+    if (isAuth && isUserTracks) {
       dispatch(getUserPlaylists());
     }
-  }, [isAuth]);
+  }, [isAuth, isUserTracks]);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -40,7 +43,9 @@ function TrackList({ track, isPlayList, isUserTracks }) {
   const setOptions = () => {
     return !isPlayList && !isUserTracks
       ? commonOptions
-      : !isPlayList && isUserTracks && userTrackListOptions;
+      : !isPlayList && isUserTracks
+      ? userTrackListOptions
+      : playlistTracksOptions;
   };
 
   const handleClose = (option, trackId) => {
@@ -69,6 +74,11 @@ function TrackList({ track, isPlayList, isUserTracks }) {
       option === "Удалить из моей музыки"
     ) {
       dispatch(deleteTrackFromTrackList(trackId));
+    } else if (
+      typeof option === "string" &&
+      option === "Удалить из плейлиста"
+    ) {
+      dispatch(deleteTrackFromPlaylist(playlistID, trackId));
     }
   };
 

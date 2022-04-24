@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -10,6 +11,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
+import { addTrackToPlaylists } from "../../store/actions/userActions/playlistActions";
 
 const style = {
   position: "absolute",
@@ -49,7 +51,7 @@ function getStyles(name, personName, theme) {
 export default function BasicModal(props) {
   const [playlistName, setPlaylistName] = useState([]);
   const theme = useTheme();
-
+  const dispatch = useDispatch();
   useEffect(() => {
     return () => {
       setPlaylistName([]);
@@ -59,6 +61,7 @@ export default function BasicModal(props) {
   const handleClose = () => props.setOpenModal(!props.openModal);
   const handleClick = () => {
     props.setOpenModal(!props.openModal);
+    dispatch(addTrackToPlaylists(playlistName, props.track.id));
   };
 
   const handleChange = (event) => {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AlbumIcon from "@mui/icons-material/Album";
 import "./tracks.css";
 import IconButton from "@mui/material/IconButton";
@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { addNewMusicToTrackList } from "../../store/actions/userActions/trackActions";
 import { deleteTrackFromTrackList } from "../../store/actions/userActions/trackActions";
+import { getUserPlaylists } from "../../store/actions/userActions/playlistActions";
 
 const commonOptions = ["Добавить в мою музыку", "Добавить в плейлист"];
 const userTrackListOptions = ["Удалить из моей музыки", "Добавить в плейлист"];
@@ -24,6 +25,13 @@ function TrackList({ track, isPlayList, isUserTracks }) {
 
   const open = Boolean(anchorEl);
   const isAuth = useSelector((s) => s.auth.login.success);
+  const userPlaylists = useSelector((s) => s.userPlaylists.userPlaylists);
+
+  useEffect(() => {
+    if (isAuth) {
+      dispatch(getUserPlaylists());
+    }
+  }, [isAuth]);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -119,6 +127,8 @@ function TrackList({ track, isPlayList, isUserTracks }) {
             openModal={openModal}
             setOpenModal={setOpenModal}
             show={"playListSelect"}
+            userPlaylists={userPlaylists}
+            track={track}
           />
         )}
       </div>

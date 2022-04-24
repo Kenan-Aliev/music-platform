@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import { useTheme } from "@mui/material/styles";
@@ -36,19 +37,6 @@ const MenuProps = {
   },
 };
 
-const names = [
-  "Oliver Hansen",
-  "Van Henry",
-  "April Tucker",
-  "Ralph Hubbard",
-  "Omar Alexander",
-  "Carlos Abbott",
-  "Miriam Wagner",
-  "Bradley Wilkerson",
-  "Virginia Andrews",
-  "Kelly Snyder",
-];
-
 function getStyles(name, personName, theme) {
   return {
     fontWeight:
@@ -59,21 +47,26 @@ function getStyles(name, personName, theme) {
 }
 
 export default function BasicModal(props) {
-  const handleClose = () => props.setOpenModal(!props.openModal);
-
+  const [playlistName, setPlaylistName] = useState([]);
   const theme = useTheme();
-  const [personName, setPersonName] = useState([]);
+
   useEffect(() => {
     return () => {
-      setPersonName([]);
+      setPlaylistName([]);
     };
   }, []);
+
+  const handleClose = () => props.setOpenModal(!props.openModal);
+  const handleClick = () => {
+    props.setOpenModal(!props.openModal);
+  };
 
   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
-    setPersonName(
+    console.log(value);
+    setPlaylistName(
       // On autofill we get a stringified value.
       typeof value === "string" ? value.split(",") : value
     );
@@ -88,48 +81,61 @@ export default function BasicModal(props) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <FormControl sx={{ m: 1, width: 300 }}>
-            <InputLabel id="demo-multiple-chip-label">
-              Выберите плейлисты
-            </InputLabel>
-            <Select
-              labelId="demo-multiple-chip-label"
-              id="demo-multiple-chip"
-              multiple
-              value={personName}
-              onChange={handleChange}
-              input={
-                <OutlinedInput
-                  id="select-multiple-chip"
-                  label="Выберите плейлисты"
-                />
-              }
-              renderValue={(selected) => (
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                  {selected.map((value) => (
-                    <Chip key={value} label={value} />
-                  ))}
-                </Box>
-              )}
-              MenuProps={MenuProps}
-            >
-              {names.map((name) => (
-                <MenuItem
-                  key={name}
-                  value={name}
-                  style={getStyles(name, personName, theme)}
+          {!props.userPlaylists.length && (
+            <Typography variant="h5">У вас еще нет плейлистов</Typography>
+          )}
+          {props.userPlaylists.length > 0 && (
+            <>
+              <FormControl sx={{ m: 1, width: 300 }}>
+                <InputLabel id="demo-multiple-chip-label">
+                  Выберите плейлисты
+                </InputLabel>
+                <Select
+                  labelId="demo-multiple-chip-label"
+                  id="demo-multiple-chip"
+                  multiple
+                  value={playlistName}
+                  onChange={handleChange}
+                  input={
+                    <OutlinedInput
+                      id="select-multiple-chip"
+                      label="Выберите плейлисты"
+                    />
+                  }
+                  renderValue={(selected) => (
+                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                      {selected.map((value) => (
+                        <Chip key={value.id} label={value.playList_name} />
+                      ))}
+                    </Box>
+                  )}
+                  MenuProps={MenuProps}
                 >
-                  {name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <Button
-            variant="contained"
-            sx={{ width: "300px", marginTop: "10px" }}
-          >
-            Добавить
-          </Button>
+                  {props.userPlaylists.map((playlist) => (
+                    <MenuItem
+                      key={playlist.id}
+                      value={playlist}
+                      style={getStyles(
+                        playlist.playList_name,
+                        playlistName,
+                        theme
+                      )}
+                    >
+                      {playlist.playList_name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <Button
+                disabled={playlistName.length === 0}
+                variant="contained"
+                sx={{ width: "300px", marginTop: "10px" }}
+                onClick={handleClick}
+              >
+                Добавить
+              </Button>
+            </>
+          )}
         </Box>
       </Modal>
     </div>

@@ -26,6 +26,8 @@ function Tracks({ isPlayList, isUserTracks }) {
     } else if (!isPlayList && isUserTracks) {
       console.log("getMyTracks");
       dispatch(getMyTracks());
+    } else if (isPlayList && !isUserTracks) {
+      
     }
   }, []);
 

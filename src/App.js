@@ -10,7 +10,7 @@ import Registration from "./components/Registration/Registration";
 import { useSelector, useDispatch } from "react-redux";
 import { checkAuth } from "./store/actions/authActions";
 import Admin from "./views/Admin/Admin";
-import EditPage from './views/Admin/EditPage/EditPage';
+import EditPage from "./views/Admin/EditPage/EditPage";
 import User from "./views/User/User";
 import MyPlayLists from "./views/User/MyPlayLists/MyPlayLists";
 
@@ -49,6 +49,10 @@ function App() {
                 element={<Tracks isPlayList={false} isUserTracks={true} />}
               />
               <Route path="myPlaylists" element={<MyPlayLists />} />
+              <Route
+                path="myPlaylists/:playlistID"
+                element={<Tracks isPlayList={true} isUserTracks={false} />}
+              />
             </Route>
             <Route
               path="admin"

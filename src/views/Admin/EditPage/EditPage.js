@@ -16,7 +16,6 @@ function EditPage({ title, isGenres, isPlayLists, isAuthors, isTracks }) {
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
   const [selected, setSelected] = useState([]);
   const dispatch = useDispatch();
-  
 
   const getData = (store) => {
     if (isAuthors) {

@@ -13,6 +13,8 @@ import Admin from "./views/Admin/Admin";
 import EditPage from "./views/Admin/EditPage/EditPage";
 import User from "./views/User/User";
 import MyPlayLists from "./views/User/MyPlayLists/MyPlayLists";
+import { getUserPlaylists } from "./store/actions/userActions/playlistActions";
+import { getAllTracks } from "./store/actions/tracksAction";
 
 function App() {
   const dispatch = useDispatch();
@@ -22,7 +24,14 @@ function App() {
 
   useEffect(() => {
     dispatch(checkAuth());
+    dispatch(getAllTracks());
   }, []);
+
+  useEffect(() => {
+    if (isAuth && !isAdmin) {
+      dispatch(getUserPlaylists());
+    }
+  }, [isAuth, isAdmin, dispatch]);
 
   return (
     <div className="App">

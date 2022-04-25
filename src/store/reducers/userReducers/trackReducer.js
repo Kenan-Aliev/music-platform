@@ -89,7 +89,7 @@ const userTrackReducer = (state = initialState, action) => {
           failed: false,
           message: action.payload.message,
         },
-        myTracks: action.payload.tracks,
+        // myTracks: action.payload.tracks,
       };
     case ADD_NEW_TRACK_TO_TRACKLIST_FAILED:
       return {

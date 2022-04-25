@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Typography from "@mui/material/Typography";
-import { getAllTracks } from "../../store/actions/tracksAction";
 import { getMyTracks } from "../../store/actions/userActions/trackActions";
 import { getPlaylistTracks } from "../../store/actions/userActions/playlistActions";
 import TrackList from "./TrackList";
@@ -12,6 +11,8 @@ import "./tracks.css";
 function Tracks({ isPlayList, isUserTracks }) {
   const dispatch = useDispatch();
   const { playlistID } = useParams();
+  const userPlaylists = useSelector((s) => s.userPlaylists.userPlaylists);
+
   const getTracks = (s) => {
     return !isPlayList && !isUserTracks
       ? s.tracks.tracks
@@ -21,18 +22,16 @@ function Tracks({ isPlayList, isUserTracks }) {
   };
 
   const tracks = useSelector((s) => getTracks(s));
-  console.log(tracks);
-  console.log("IsplayList=====> " + isPlayList);
-  console.log("IsUSerTracks=====> " + isUserTracks);
 
   useEffect(() => {
-    if (!isPlayList && !isUserTracks) {
-      dispatch(getAllTracks());
-    } else if (!isPlayList && isUserTracks) {
-      console.log("getMyTracks");
-      dispatch(getMyTracks());
-    } else if (isPlayList && !isUserTracks) {
+    if (isPlayList && !isUserTracks) {
       dispatch(getPlaylistTracks(playlistID));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isUserTracks) {
+      dispatch(getMyTracks());
     }
   }, []);
 
@@ -51,13 +50,14 @@ function Tracks({ isPlayList, isUserTracks }) {
                 ? "Песни из вашего плейлиста"
                 : "Ваши песни"}
             </Typography>
-            {tracks.map((track) => {
+            {tracks?.map((track) => {
               return (
                 <TrackList
                   track={track}
                   key={track.id}
                   isPlayList={isPlayList}
                   isUserTracks={isUserTracks}
+                  userPlaylists={userPlaylists}
                 />
               );
             })}

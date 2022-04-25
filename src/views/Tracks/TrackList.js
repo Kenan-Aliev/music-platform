@@ -11,7 +11,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { addNewMusicToTrackList } from "../../store/actions/userActions/trackActions";
 import { deleteTrackFromTrackList } from "../../store/actions/userActions/trackActions";
-import { getUserPlaylists } from "../../store/actions/userActions/playlistActions";
 import { deleteTrackFromPlaylist } from "../../store/actions/userActions/playlistActions";
 
 const commonOptions = ["Добавить в мою музыку", "Добавить в плейлист"];
@@ -20,21 +19,15 @@ const playlistTracksOptions = ["Удалить из плейлиста"];
 
 const ITEM_HEIGHT = 48;
 
-function TrackList({ track, isPlayList, isUserTracks }) {
+function TrackList({ track, isPlayList, isUserTracks, userPlaylists }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openModal, setOpenModal] = useState(false);
+  const isAuth = useSelector((s) => s.auth.login.success);
+  const isAdmin = useSelector((s) => s.auth.user.isAdmin);
 
   const dispatch = useDispatch();
   const { playlistID } = useParams();
   const open = Boolean(anchorEl);
-  const isAuth = useSelector((s) => s.auth.login.success);
-  const userPlaylists = useSelector((s) => s.userPlaylists.userPlaylists);
-
-  useEffect(() => {
-    if (isAuth && isUserTracks) {
-      dispatch(getUserPlaylists());
-    }
-  }, [isAuth, isUserTracks]);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -51,11 +44,11 @@ function TrackList({ track, isPlayList, isUserTracks }) {
   const handleClose = (option, trackId) => {
     setAnchorEl(null);
     if (typeof option === "string" && option === "Добавить в плейлист") {
-      if (isAuth) {
+      if (isAuth && !isAdmin) {
         setOpenModal(!openModal);
       } else {
         toast.error(
-          "Чтобы добавить песню в ваши плейлисты, вы должны быть авторизованы"
+          "Чтобы добавить песню в ваши плейлисты, вы должны быть авторизованы и обычным пользователем"
         );
       }
     } else if (

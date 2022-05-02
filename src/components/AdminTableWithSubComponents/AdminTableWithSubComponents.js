@@ -84,9 +84,15 @@ function Row(props) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell align="left">{row.email}</TableCell>
-        <TableCell align="left">{row.username}</TableCell>
-        <TableCell align="left">{row.playlistsCount}</TableCell>
+        <TableCell align="left" padding="none">
+          {row.email}
+        </TableCell>
+        <TableCell align="left" padding="none">
+          {row.username}
+        </TableCell>
+        <TableCell align="left" padding="none">
+          {row.playlistsCount}
+        </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -104,7 +110,7 @@ function Row(props) {
   );
 }
 
-export default function CollapsibleTable({ data }) {
+export default function CollapsibleTable({ data, isAlbums, isUsers }) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("email");
   const [page, setPage] = React.useState(0);

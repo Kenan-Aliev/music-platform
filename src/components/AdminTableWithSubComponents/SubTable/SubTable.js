@@ -43,13 +43,13 @@ const playlistsHeadCells = [
   {
     id: "playList_name",
     numeric: false,
-    disablePadding: true,
+    disablePadding: false,
     label: "Название плейлиста",
   },
   {
     id: "tracksCount",
     numeric: false,
-    disablePadding: true,
+    disablePadding: false,
     label: "Количество песен",
   },
 ];
@@ -97,6 +97,7 @@ function SubTable({ data }) {
               </TableCell>
             );
           })}
+          <TableCell />
         </TableRow>
       </TableHead>
       <TableBody>

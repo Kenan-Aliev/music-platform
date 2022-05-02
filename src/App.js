@@ -14,7 +14,6 @@ import EditPage from "./views/Admin/EditPage/EditPage";
 import User from "./views/User/User";
 import MyPlayLists from "./views/User/MyPlayLists/MyPlayLists";
 import { getUserPlaylists } from "./store/actions/userActions/playlistActions";
-import { getAllTracks } from "./store/actions/tracksAction";
 
 function App() {
   const dispatch = useDispatch();
@@ -75,6 +74,7 @@ function App() {
                     isUsers={false}
                     isAuthors={false}
                     isTracks={true}
+                    isAlbums={false}
                   />
                 }
               />
@@ -87,6 +87,7 @@ function App() {
                     isUsers={false}
                     isAuthors={false}
                     isTracks={false}
+                    isAlbums={false}
                   />
                 }
               />
@@ -99,6 +100,7 @@ function App() {
                     isUsers={false}
                     isAuthors={true}
                     isTracks={false}
+                    isAlbums={false}
                   />
                 }
               />
@@ -111,6 +113,20 @@ function App() {
                     isUsers={true}
                     isAuthors={false}
                     isTracks={false}
+                    isAlbums={false}
+                  />
+                }
+              />
+              <Route
+                path="albums"
+                element={
+                  <EditPage
+                    title={"Альбомы"}
+                    isGenres={false}
+                    isUsers={false}
+                    isAuthors={false}
+                    isTracks={false}
+                    isAlbums={true}
                   />
                 }
               />

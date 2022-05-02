@@ -13,7 +13,7 @@ import AdminConfirmModal from "../../../components/AdminConfirmModal/AdminConfir
 import AdminTableWithSubComponents from "../../../components/AdminTableWithSubComponents/AdminTableWithSubComponents";
 import { getUsersPlaylists } from "../../../store/actions/adminActions/usersPlaylistsActions";
 
-function EditPage({ title, isGenres, isUsers, isAuthors, isTracks }) {
+function EditPage({ title, isGenres, isUsers, isAuthors, isTracks, isAlbums }) {
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
   const [selected, setSelected] = useState([]);
@@ -62,10 +62,12 @@ function EditPage({ title, isGenres, isUsers, isAuthors, isTracks }) {
 
   const getButtonText = () => {
     return isGenres
-      ? "Добавить новый жанр"
+      ? "Создать новый жанр"
       : isAuthors
-      ? "Добавить нового исполнителя"
-      : isTracks && "Добавить новую песню";
+      ? "Создать нового исполнителя"
+      : isTracks
+      ? "Создать новую песню"
+      : "Создать новый альбом";
   };
   return (
     <div className="editpage">
@@ -79,7 +81,7 @@ function EditPage({ title, isGenres, isUsers, isAuthors, isTracks }) {
             {getButtonText()}
           </Button>
         )}
-        {!isUsers ? (
+        {!isUsers && !isAlbums ? (
           <Table
             title={title}
             data={data}
@@ -91,7 +93,11 @@ function EditPage({ title, isGenres, isUsers, isAuthors, isTracks }) {
             handleShowConfirmModal={handleShowConfirmModal}
           />
         ) : (
-          <AdminTableWithSubComponents data={data} />
+          <AdminTableWithSubComponents
+            data={data}
+            isAlbums={isAlbums}
+            isUsers={isUsers}
+          />
         )}
         {openAddModal && (
           <AdminAddModal

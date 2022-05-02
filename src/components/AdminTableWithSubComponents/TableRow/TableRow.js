@@ -17,17 +17,21 @@ function TableRowItem({ datarow, ...rest }) {
         setMouseOver(false);
       }}
     >
-      <TableCell align="left">{datarow.playList_name}</TableCell>
-      <TableCell align="left">{datarow.tracksCount}</TableCell>
-      {mouseOver && (
-        <TableCell>
+      <TableCell align="left" padding="normal">
+        {datarow.playList_name}
+      </TableCell>
+      <TableCell align="left" padding="normal">
+        {datarow.tracksCount}
+      </TableCell>
+      <TableCell align="left" padding="normal">
+        {mouseOver && (
           <Tooltip title="Удалить">
             <IconButton>
               <DeleteIcon />
             </IconButton>
           </Tooltip>
-        </TableCell>
-      )}
+        )}
+      </TableCell>
     </TableRow>
   );
 }

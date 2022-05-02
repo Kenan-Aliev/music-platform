@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./header.css";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -19,12 +19,13 @@ import { logout } from "../../store/actions/authActions";
 
 const commonpages = ["Зарегистрироваться", "Войти"];
 const userPages = ["Мои песни", "Мои плейлисты"];
-const adminPages = ["Исполнители", "Жанры", "Песни", "Пользователи"];
+const adminPages = ["Альбомы", "Жанры", "Исполнители", "Песни", "Пользователи"];
 const settings = ["Главная", "Выйти"];
 
 function Header() {
   const isAuth = useSelector((s) => s.auth.login.success);
   const isAdmin = useSelector((s) => s.auth.user.isAdmin);
+  const [activeLink, setActiveLink] = useState("");
   const user = useSelector((s) => s.auth.user);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -45,32 +46,33 @@ function Header() {
       navigate("auth/login");
     }
     setAnchorElNav(null);
+    setActiveLink(page);
   };
 
   const userPageClickHandler = (page) => {
     if (page === "Мои песни") {
       navigate("/user/myTracks");
-    }
-    if (page === "Мои плейлисты") {
+    } else if (page === "Мои плейлисты") {
       navigate("/user/myPlaylists");
     }
+    setActiveLink(page);
     setAnchorElNav(null);
   };
 
   const adminPageClickHandler = (page) => {
     if (page === "Исполнители") {
       navigate("/admin/authors");
-    }
-    if (page === "Жанры") {
+    } else if (page === "Жанры") {
       navigate("/admin/genres");
-    }
-    if (page === "Песни") {
+    } else if (page === "Песни") {
       navigate("/admin/musics");
-    }
-    if (page === "Пользователи") {
+    } else if (page === "Пользователи") {
       navigate("/admin/users");
+    } else if (page === "Альбомы") {
+      navigate("/admin/albums");
     }
     setAnchorElNav(null);
+    setActiveLink(page);
   };
 
   const handleCloseNavMenu = () => {
@@ -85,6 +87,7 @@ function Header() {
       navigate("/");
     }
     setAnchorElUser(null);
+    setActiveLink("");
   };
 
   return (
@@ -92,7 +95,13 @@ function Header() {
       <AppBar position="static" sx={{ backgroundColor: "blue" }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <NavLink to="/" className="header__logo">
+            <NavLink
+              to="/"
+              className="header__logo"
+              onClick={() => {
+                setActiveLink("");
+              }}
+            >
               <LibraryMusicIcon sx={{ display: { xs: "none", md: "flex" } }} />
             </NavLink>
 
@@ -175,6 +184,7 @@ function Header() {
                 flexGrow: 1,
                 display: { xs: "none", md: "flex" },
                 justifyContent: "flex-end",
+                marginRight: "10px",
               }}
             >
               {isAuth
@@ -182,6 +192,7 @@ function Header() {
                   ? adminPages.map((page) => (
                       <Button
                         key={page}
+                        variant={activeLink === page ? "contained" : "text"}
                         onClick={() => adminPageClickHandler(page)}
                         sx={{ my: 2, color: "white", display: "block" }}
                       >
@@ -191,6 +202,7 @@ function Header() {
                   : userPages.map((page) => (
                       <Button
                         key={page}
+                        variant={activeLink === page ? "contained" : "text"}
                         onClick={() => userPageClickHandler(page)}
                         sx={{ my: 2, color: "white", display: "block" }}
                       >
@@ -200,6 +212,7 @@ function Header() {
                 : commonpages.map((page) => (
                     <Button
                       key={page}
+                      variant={activeLink === page ? "contained" : "text"}
                       onClick={() => commonPageClickHandler(page)}
                       sx={{ my: 2, color: "white", display: "block" }}
                     >

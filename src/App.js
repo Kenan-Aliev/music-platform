@@ -24,7 +24,6 @@ function App() {
 
   useEffect(() => {
     dispatch(checkAuth());
-    dispatch(getAllTracks());
   }, []);
 
   useEffect(() => {
@@ -73,7 +72,7 @@ function App() {
                   <EditPage
                     title={"Песни"}
                     isGenres={false}
-                    isPlayLists={false}
+                    isUsers={false}
                     isAuthors={false}
                     isTracks={true}
                   />
@@ -85,7 +84,7 @@ function App() {
                   <EditPage
                     title={"Жанры"}
                     isGenres={true}
-                    isPlayLists={false}
+                    isUsers={false}
                     isAuthors={false}
                     isTracks={false}
                   />
@@ -97,19 +96,19 @@ function App() {
                   <EditPage
                     title={"Авторы"}
                     isGenres={false}
-                    isPlayLists={false}
+                    isUsers={false}
                     isAuthors={true}
                     isTracks={false}
                   />
                 }
               />
               <Route
-                path="playlists"
+                path="users"
                 element={
                   <EditPage
-                    title={"Плейлисты"}
+                    title={"Пользователи"}
                     isGenres={false}
-                    isPlayLists={true}
+                    isUsers={true}
                     isAuthors={false}
                     isTracks={false}
                   />

@@ -32,9 +32,9 @@ export default function AdminConfirmModal({
   handleShowConfirmModal,
   selected,
   isGenres,
+  isUsers,
   isAuthors,
   isTracks,
-  isPlaylists,
 }) {
   const dispatch = useDispatch();
   const handleDeleteClick = () => {

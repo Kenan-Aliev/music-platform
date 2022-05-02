@@ -19,7 +19,7 @@ import { logout } from "../../store/actions/authActions";
 
 const commonpages = ["Зарегистрироваться", "Войти"];
 const userPages = ["Мои песни", "Мои плейлисты"];
-const adminPages = ["Исполнители", "Жанры", "Песни", "Плейлисты"];
+const adminPages = ["Исполнители", "Жанры", "Песни", "Пользователи"];
 const settings = ["Главная", "Выйти"];
 
 function Header() {
@@ -67,8 +67,8 @@ function Header() {
     if (page === "Песни") {
       navigate("/admin/musics");
     }
-    if (page === "Плейлисты") {
-      navigate("/admin/playlists");
+    if (page === "Пользователи") {
+      navigate("/admin/users");
     }
     setAnchorElNav(null);
   };

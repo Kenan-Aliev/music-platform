@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Typography from "@mui/material/Typography";
 import { getMyTracks } from "../../store/actions/userActions/trackActions";
 import { getPlaylistTracks } from "../../store/actions/userActions/playlistActions";
+import { getAllTracks } from "../../store/actions/tracksAction";
 import TrackList from "./TrackList";
 import Container from "../../components/Container/Container";
 import "./tracks.css";
@@ -26,6 +27,8 @@ function Tracks({ isPlayList, isUserTracks }) {
   useEffect(() => {
     if (isPlayList && !isUserTracks) {
       dispatch(getPlaylistTracks(playlistID));
+    } else if (!isUserTracks && !isPlayList) {
+      dispatch(getAllTracks());
     }
   }, []);
 

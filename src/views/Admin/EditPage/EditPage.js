@@ -10,8 +10,10 @@ import Container from "../../../components/Container/Container";
 import AdminAddModal from "../../../components/AdminAddModal/AdminAddModal";
 import "./editPage.css";
 import AdminConfirmModal from "../../../components/AdminConfirmModal/AdminConfirmModal";
+import AdminTableWithSubComponents from "../../../components/AdminTableWithSubComponents/AdminTableWithSubComponents";
+import { getUsersPlaylists } from "../../../store/actions/adminActions/usersPlaylistsActions";
 
-function EditPage({ title, isGenres, isPlayLists, isAuthors, isTracks }) {
+function EditPage({ title, isGenres, isUsers, isAuthors, isTracks }) {
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
   const [selected, setSelected] = useState([]);
@@ -24,9 +26,12 @@ function EditPage({ title, isGenres, isPlayLists, isAuthors, isTracks }) {
       return store.genres.genres;
     } else if (isTracks) {
       return store.adminTracks.tracks;
+    } else if (isUsers) {
+      return store.users_playlists.users_playlists;
     }
   };
   const data = useSelector((s) => getData(s));
+  console.log(data);
 
   useEffect(() => {
     if (isGenres) {
@@ -37,13 +42,15 @@ function EditPage({ title, isGenres, isPlayLists, isAuthors, isTracks }) {
       dispatch(getAllTracks());
       dispatch(getAllAuthors());
       dispatch(getAllGenres());
+    } else if (isUsers) {
+      dispatch(getUsersPlaylists());
     }
     return () => {
       setSelected([]);
       setOpenConfirmModal(false);
       setOpenAddModal(false);
     };
-  }, [isGenres, isPlayLists, isAuthors, isTracks, dispatch]);
+  }, [isGenres, isUsers, isAuthors, isTracks, dispatch]);
 
   const handleShowAddModal = () => {
     setOpenAddModal(!openAddModal);
@@ -58,31 +65,34 @@ function EditPage({ title, isGenres, isPlayLists, isAuthors, isTracks }) {
       ? "Добавить новый жанр"
       : isAuthors
       ? "Добавить нового исполнителя"
-      : isTracks
-      ? "Добавить новую песню"
-      : "Соси хуй";
+      : isTracks && "Добавить новую песню";
   };
   return (
     <div className="editpage">
       <Container>
-        <Button
-          variant="outlined"
-          startIcon={<AddIcon />}
-          onClick={handleShowAddModal}
-        >
-          {getButtonText()}
-        </Button>
-        <Table
-          title={title}
-          data={data}
-          isGenres={isGenres}
-          isPlayLists={isPlayLists}
-          isAuthors={isAuthors}
-          isTracks={isTracks}
-          selected={selected}
-          setSelected={setSelected}
-          handleShowConfirmModal={handleShowConfirmModal}
-        />
+        {!isUsers && (
+          <Button
+            variant="outlined"
+            startIcon={<AddIcon />}
+            onClick={handleShowAddModal}
+          >
+            {getButtonText()}
+          </Button>
+        )}
+        {!isUsers ? (
+          <Table
+            title={title}
+            data={data}
+            isGenres={isGenres}
+            isAuthors={isAuthors}
+            isTracks={isTracks}
+            selected={selected}
+            setSelected={setSelected}
+            handleShowConfirmModal={handleShowConfirmModal}
+          />
+        ) : (
+          <AdminTableWithSubComponents data={data} />
+        )}
         {openAddModal && (
           <AdminAddModal
             isGenres={isGenres}
@@ -95,7 +105,7 @@ function EditPage({ title, isGenres, isPlayLists, isAuthors, isTracks }) {
         {openConfirmModal && (
           <AdminConfirmModal
             isGenres={isGenres}
-            isPlayLists={isPlayLists}
+            isUsers={isUsers}
             isAuthors={isAuthors}
             isTracks={isTracks}
             openModal={openConfirmModal}

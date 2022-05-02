@@ -97,7 +97,6 @@ function EnhancedTableHead(props) {
     rowCount,
     onRequestSort,
     isGenres,
-    isPlayLists,
     isAuthors,
     isTracks,
   } = props;
@@ -156,14 +155,7 @@ function EnhancedTableHead(props) {
   );
 }
 
-EnhancedTableHead.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(["asc", "desc"]).isRequired,
-  orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
-};
+
 
 const EnhancedTableToolbar = (props) => {
   const { numSelected } = props;
@@ -218,15 +210,12 @@ const EnhancedTableToolbar = (props) => {
   );
 };
 
-EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-};
+
 
 export default function EnhancedTable({
   title,
   data,
   isGenres,
-  isPlayLists,
   isAuthors,
   selected,
   setSelected,
@@ -325,7 +314,6 @@ export default function EnhancedTable({
               onRequestSort={handleRequestSort}
               rowCount={ref.current.length}
               isGenres={isGenres}
-              isPlayLists={isPlayLists}
               isAuthors={isAuthors}
               isTracks={isTracks}
             />

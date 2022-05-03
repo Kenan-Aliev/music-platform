@@ -68,8 +68,35 @@ const usersHeadCells = [
   },
 ];
 
+const albumHeadCells = [
+  {
+    id: "name",
+    numeric: false,
+    disablePadding: true,
+    label: "Название альбома",
+  },
+  {
+    id: "year",
+    numeric: false,
+    disablePadding: true,
+    label: "Год выпуска",
+  },
+  {
+    id: "author",
+    numeric: false,
+    disablePadding: true,
+    label: "Имя исполнителя",
+  },
+  {
+    id: "tracksCount",
+    numeric: false,
+    disablePadding: true,
+    label: "Количество песен",
+  },
+];
+
 function Row(props) {
-  const { row } = props;
+  const { row, isAlbums } = props;
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -85,23 +112,31 @@ function Row(props) {
           </IconButton>
         </TableCell>
         <TableCell align="left" padding="none">
-          {row.email}
+          {isAlbums ? row.name : row.email}
         </TableCell>
         <TableCell align="left" padding="none">
-          {row.username}
+          {isAlbums ? row.year : row.username}
         </TableCell>
         <TableCell align="left" padding="none">
-          {row.playlistsCount}
+          {isAlbums ? row.author : row.playlistsCount}
         </TableCell>
+        {isAlbums && (
+          <TableCell align="left" padding="none">
+            {row.tracksCount}
+          </TableCell>
+        )}
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
               <Typography variant="h6" gutterBottom component="div">
-                Плейлисты
+                {isAlbums ? "Песни" : "Плейлисты"}
               </Typography>
-              <SubTable data={row.playlists} />
+              <SubTable
+                data={isAlbums ? row.tracks : row.playlists}
+                isAlbums={isAlbums}
+              />
             </Box>
           </Collapse>
         </TableCell>
@@ -115,6 +150,14 @@ export default function CollapsibleTable({ data, isAlbums, isUsers }) {
   const [orderBy, setOrderBy] = React.useState("email");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const getHeadCells = () => {
+    if (isAlbums) {
+      return albumHeadCells;
+    } else if (isUsers) {
+      return usersHeadCells;
+    }
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -143,7 +186,7 @@ export default function CollapsibleTable({ data, isAlbums, isUsers }) {
           <TableHead>
             <TableRow>
               <TableCell />
-              {usersHeadCells.map((headCell) => {
+              {getHeadCells().map((headCell) => {
                 return (
                   <TableCell
                     key={headCell.id}
@@ -175,7 +218,7 @@ export default function CollapsibleTable({ data, isAlbums, isUsers }) {
             {stableSort(data, getComparator(order, orderBy))
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => (
-                <Row key={row.id} row={row} />
+                <Row key={row.id} row={row} isAlbums={isAlbums} />
               ))}
             {emptyRows > 0 && (
               <TableRow

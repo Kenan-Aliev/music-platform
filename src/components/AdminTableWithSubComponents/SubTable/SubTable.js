@@ -54,9 +54,28 @@ const playlistsHeadCells = [
   },
 ];
 
-function SubTable({ data }) {
+const trackHeadCells = [
+  {
+    id: "name",
+    numeric: false,
+    disablePadding: false,
+    label: "Название песни",
+  },
+];
+
+function SubTable({ data, isAlbums }) {
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("playlistName");
+  const [orderBy, setOrderBy] = React.useState(
+    isAlbums ? "name" : "playList_name"
+  );
+
+  const getHeadCells = () => {
+    if (isAlbums) {
+      return trackHeadCells;
+    } else {
+      return playlistsHeadCells;
+    }
+  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -71,7 +90,7 @@ function SubTable({ data }) {
     <Table size="small" aria-label="purchases">
       <TableHead>
         <TableRow>
-          {playlistsHeadCells.map((headCell) => {
+          {getHeadCells().map((headCell) => {
             return (
               <TableCell
                 key={headCell.id}
@@ -102,7 +121,12 @@ function SubTable({ data }) {
       </TableHead>
       <TableBody>
         {stableSort(data, getComparator(order, orderBy)).map((datarow) => (
-          <TableRowItem key={datarow.id} hover datarow={datarow} />
+          <TableRowItem
+            key={datarow.id}
+            hover
+            datarow={datarow}
+            isAlbums={isAlbums}
+          />
         ))}
       </TableBody>
     </Table>

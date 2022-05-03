@@ -81,13 +81,14 @@ function Header() {
 
   const handleCloseUserMenu = (setting) => {
     if (setting === "Выйти") {
+      setActiveLink("");
       dispatch(logout());
     }
     if (setting === "Главная") {
+      setActiveLink("");
       navigate("/");
     }
     setAnchorElUser(null);
-    setActiveLink("");
   };
 
   return (

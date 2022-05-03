@@ -26,9 +26,13 @@ const apiRoutes = {
       new: "/track/create",
       delete: "/track/delete",
     },
-    users_playlists:{
-      getAll:'/playlist/getUsersPlaylists'
-    }
+    users_playlists: {
+      getAll: "/playlist/getUsersPlaylists",
+    },
+    albums: {
+      getAll: "/album/getAll",
+      new: "/album/new",
+    },
   },
   user: {
     tracks: {

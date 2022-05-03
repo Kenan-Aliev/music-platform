@@ -5,7 +5,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 
-function TableRowItem({ datarow, ...rest }) {
+function TableRowItem({ datarow, isAlbums, ...rest }) {
   const [mouseOver, setMouseOver] = useState(false);
   return (
     <TableRow
@@ -17,12 +17,20 @@ function TableRowItem({ datarow, ...rest }) {
         setMouseOver(false);
       }}
     >
-      <TableCell align="left" padding="normal">
-        {datarow.playList_name}
-      </TableCell>
-      <TableCell align="left" padding="normal">
-        {datarow.tracksCount}
-      </TableCell>
+      {isAlbums ? (
+        <TableCell align="left" padding="normal">
+          {datarow.name}
+        </TableCell>
+      ) : (
+        <>
+          <TableCell align="left" padding="normal">
+            {datarow.playList_name}
+          </TableCell>
+          <TableCell align="left" padding="normal">
+            {datarow.tracksCount}
+          </TableCell>
+        </>
+      )}
       <TableCell align="left" padding="normal">
         {mouseOver && (
           <Tooltip title="Удалить">

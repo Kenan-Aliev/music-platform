@@ -12,6 +12,7 @@ import "./editPage.css";
 import AdminConfirmModal from "../../../components/AdminConfirmModal/AdminConfirmModal";
 import AdminTableWithSubComponents from "../../../components/AdminTableWithSubComponents/AdminTableWithSubComponents";
 import { getUsersPlaylists } from "../../../store/actions/adminActions/usersPlaylistsActions";
+import { getAllAlbums } from "../../../store/actions/adminActions/albumActions";
 
 function EditPage({ title, isGenres, isUsers, isAuthors, isTracks, isAlbums }) {
   const [openAddModal, setOpenAddModal] = useState(false);
@@ -28,6 +29,8 @@ function EditPage({ title, isGenres, isUsers, isAuthors, isTracks, isAlbums }) {
       return store.adminTracks.tracks;
     } else if (isUsers) {
       return store.users_playlists.users_playlists;
+    } else if (isAlbums) {
+      return store.albums.albums;
     }
   };
   const data = useSelector((s) => getData(s));
@@ -44,13 +47,17 @@ function EditPage({ title, isGenres, isUsers, isAuthors, isTracks, isAlbums }) {
       dispatch(getAllGenres());
     } else if (isUsers) {
       dispatch(getUsersPlaylists());
+    } else if (isAlbums) {
+      dispatch(getAllAlbums());
+      dispatch(getAllAuthors());
+      dispatch(getAllTracks());
     }
     return () => {
       setSelected([]);
       setOpenConfirmModal(false);
       setOpenAddModal(false);
     };
-  }, [isGenres, isUsers, isAuthors, isTracks, dispatch]);
+  }, [isGenres, isUsers, isAuthors, isTracks, isAlbums, dispatch]);
 
   const handleShowAddModal = () => {
     setOpenAddModal(!openAddModal);
@@ -61,13 +68,15 @@ function EditPage({ title, isGenres, isUsers, isAuthors, isTracks, isAlbums }) {
   };
 
   const getButtonText = () => {
-    return isGenres
-      ? "Создать новый жанр"
-      : isAuthors
-      ? "Создать нового исполнителя"
-      : isTracks
-      ? "Создать новую песню"
-      : "Создать новый альбом";
+    if (isAuthors) {
+      return "Создать нового исполнителя";
+    } else if (isTracks) {
+      return "Создать новый трек";
+    } else if (isAlbums) {
+      return "Создать новый альбом";
+    } else if (isGenres) {
+      return "Создать новый жанр";
+    }
   };
   return (
     <div className="editpage">
@@ -104,6 +113,7 @@ function EditPage({ title, isGenres, isUsers, isAuthors, isTracks, isAlbums }) {
             isGenres={isGenres}
             isAuthors={isAuthors}
             isTracks={isTracks}
+            isAlbums={isAlbums}
             openModal={openAddModal}
             handleShowModal={handleShowAddModal}
           />

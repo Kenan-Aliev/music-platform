@@ -40,6 +40,7 @@ const MenuProps = {
 };
 
 function getStyles(name, personName, theme) {
+  console.log(name);
   return {
     fontWeight:
       personName.indexOf(name) === -1

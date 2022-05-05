@@ -63,7 +63,7 @@ const trackHeadCells = [
   },
 ];
 
-function SubTable({ data, isAlbums }) {
+function SubTable({ data, isAlbums, userORalbumID }) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState(
     isAlbums ? "name" : "playList_name"
@@ -122,6 +122,7 @@ function SubTable({ data, isAlbums }) {
       <TableBody>
         {stableSort(data, getComparator(order, orderBy)).map((datarow) => (
           <TableRowItem
+            userORalbumID={userORalbumID}
             key={datarow.id}
             hover
             datarow={datarow}

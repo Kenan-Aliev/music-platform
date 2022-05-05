@@ -111,17 +111,17 @@ function Row(props) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell align="left" padding="none">
+        <TableCell align="left" padding="normal">
           {isAlbums ? row.name : row.email}
         </TableCell>
-        <TableCell align="left" padding="none">
+        <TableCell align="left" padding="normal">
           {isAlbums ? row.year : row.username}
         </TableCell>
-        <TableCell align="left" padding="none">
+        <TableCell align="left" padding="normal">
           {isAlbums ? row.author : row.playlistsCount}
         </TableCell>
         {isAlbums && (
-          <TableCell align="left" padding="none">
+          <TableCell align="left" padding="normal">
             {row.tracksCount}
           </TableCell>
         )}
@@ -135,6 +135,7 @@ function Row(props) {
               </Typography>
               <SubTable
                 data={isAlbums ? row.tracks : row.playlists}
+                userORalbumID={row.id}
                 isAlbums={isAlbums}
               />
             </Box>
@@ -192,7 +193,7 @@ export default function CollapsibleTable({ data, isAlbums, isUsers }) {
                     key={headCell.id}
                     align={headCell.numeric ? "right" : "left"}
                     sx={{ fontWeight: 600 }}
-                    padding={headCell.disablePadding ? "none" : "normal"}
+                    padding={"none"}
                     sortDirection={orderBy === headCell.id ? order : false}
                   >
                     <TableSortLabel

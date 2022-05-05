@@ -6,7 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import Modal from "../../components/AddToPlayListModal/AddToPlayListModal";
+import Modal from "../../components/Modals/User/AddToPlayListModal/AddToPlayListModal";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { addNewMusicToTrackList } from "../../store/actions/userActions/trackActions";

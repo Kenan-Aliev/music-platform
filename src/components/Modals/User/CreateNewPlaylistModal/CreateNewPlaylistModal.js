@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import Box from "@mui/material/Box";
-import Button from "../../components/Button/Button";
+import Button from "../../../Button/Button";
 import TextField from "@mui/material/TextField";
 import Modal from "@mui/material/Modal";
 import AddIcon from "@mui/icons-material/Add";
-import { addNewPlaylist } from "../../store/actions/userActions/playlistActions";
+import { addNewPlaylist } from "../../../../store/actions/userActions/playlistActions";
 
 const style = {
   position: "absolute",
@@ -24,7 +24,7 @@ const style = {
   p: 4,
 };
 
-function UserPlaylistAddModal({ openModal, handleShowModal }) {
+function CreateNewPlaylistModal({ openModal, handleShowModal }) {
   const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
 
@@ -65,4 +65,4 @@ function UserPlaylistAddModal({ openModal, handleShowModal }) {
   );
 }
 
-export default UserPlaylistAddModal;
+export default CreateNewPlaylistModal

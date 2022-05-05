@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import { useDispatch, useSelector } from "react-redux";
-import Table from "../../../components/Table/Table";
+import Table from "../../../components/Admin/Table/Table";
 import { getAllAuthors } from "../../../store/actions/adminActions/authorActions";
 import { getAllGenres } from "../../../store/actions/adminActions/genresActions";
 import { getAllTracks } from "../../../store/actions/adminActions/trackActions";
@@ -9,7 +9,7 @@ import Button from "../../../components/Button/Button";
 import Container from "../../../components/Container/Container";
 import AdminAddModal from "../../../components/AdminAddModal/AdminAddModal";
 import "./editPage.css";
-import AdminConfirmModal from "../../../components/AdminConfirmModal/AdminConfirmModal";
+import AdminConfirmModal from "../../../components/Modals/Admin/AdminConfirmModal/AdminConfirmModal";
 import AdminTableWithSubComponents from "../../../components/AdminTableWithSubComponents/AdminTableWithSubComponents";
 import { getUsersPlaylists } from "../../../store/actions/adminActions/usersPlaylistsActions";
 import { getAllAlbums } from "../../../store/actions/adminActions/albumActions";
@@ -34,7 +34,6 @@ function EditPage({ title, isGenres, isUsers, isAuthors, isTracks, isAlbums }) {
     }
   };
   const data = useSelector((s) => getData(s));
-  console.log(data);
 
   useEffect(() => {
     if (isGenres) {

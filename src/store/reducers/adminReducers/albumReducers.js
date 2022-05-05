@@ -5,6 +5,9 @@ const GET_ALL_ALBUMS_FAILED = "GET_ALL_ALBUMS_FAILED";
 const ADD_NEW_ALBUM_LOADING = "ADD_NEW_ALBUM_LOADING";
 const ADD_NEW_ALBUM_SUCCESS = "ADD_NEW_ALBUM_SUCCESS";
 const ADD_NEW_ALBUM_FAILED = "ADD_NEW_ALBUM_FAILED";
+const DELETE_TRACK_FROM_ALBUM_LOADING = "DELETE_TRACK_FROM_ALBUM_LOADING";
+const DELETE_TRACK_FROM_ALBUM_SUCCESS = "DELETE_TRACK_FROM_ALBUM_SUCCESS";
+const DELETE_TRACK_FROM_ALBUM_FAILED = "DELETE_TRACK_FROM_ALBUM_FAILED";
 
 const initialState = {
   getAlbums: {
@@ -14,6 +17,12 @@ const initialState = {
     message: "",
   },
   addNewAlbum: {
+    success: false,
+    loading: false,
+    failed: false,
+    message: "",
+  },
+  deleteTrackFromAlbum: {
     success: false,
     loading: false,
     failed: false,
@@ -86,6 +95,40 @@ const albumsReducer = (state = initialState, action) => {
           message: action.payload.message,
         },
       };
+    case DELETE_TRACK_FROM_ALBUM_LOADING:
+      return {
+        ...state,
+        deleteTrackFromAlbum: {
+          success: false,
+          loading: true,
+          failed: false,
+          message: "",
+        },
+      };
+    case DELETE_TRACK_FROM_ALBUM_SUCCESS:
+      return {
+        ...state,
+        deleteTrackFromAlbum: {
+          success: true,
+          loading: false,
+          failed: false,
+          message: action.payload.message,
+        },
+        albums: state.albums.map((album) =>
+          action.payload.album.id === album.id ? action.payload.album : album
+        ),
+      };
+
+    case DELETE_TRACK_FROM_ALBUM_FAILED:
+      return {
+        ...state,
+        deleteTrackFromAlbum: {
+          success: false,
+          loading: false,
+          failed: true,
+          message: action.payload.message,
+        },
+      };
     default:
       return state;
   }
@@ -113,6 +156,20 @@ export const addNewAlbumSuccess = (payload) => ({
 
 export const addNewAlbumFailed = (payload) => ({
   type: ADD_NEW_ALBUM_FAILED,
+  payload,
+});
+
+export const deleteTrackFromAlbumLoading = () => ({
+  type: DELETE_TRACK_FROM_ALBUM_LOADING,
+});
+
+export const deleteTrackFromAlbumSuccess = (payload) => ({
+  type: DELETE_TRACK_FROM_ALBUM_SUCCESS,
+  payload,
+});
+
+export const deleteTrackFromAlbumFailed = (payload) => ({
+  type: DELETE_TRACK_FROM_ALBUM_FAILED,
   payload,
 });
 export default albumsReducer;

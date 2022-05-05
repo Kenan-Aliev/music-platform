@@ -6,9 +6,11 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { deleteAuthors } from "../../store/actions/adminActions/authorActions";
-import { deleteGenres } from "../../store/actions/adminActions/genresActions";
-import { deleteTracks } from "../../store/actions/adminActions/trackActions";
+import { deleteAuthors } from "../../../../store/actions/adminActions/authorActions";
+import { deleteGenres } from "../../../../store/actions/adminActions/genresActions";
+import { deleteTracks } from "../../../../store/actions/adminActions/trackActions";
+import { deleteUserPlaylist } from "../../../../store/actions/adminActions/usersPlaylistsActions";
+import { deleteAlbumTrack } from "../../../../store/actions/adminActions/albumActions";
 
 const style = {
   position: "absolute",
@@ -34,26 +36,46 @@ export default function AdminConfirmModal({
   isGenres,
   isUsers,
   isAuthors,
+  isAlbums,
   isTracks,
+  userORalbumID,
 }) {
   const dispatch = useDispatch();
   const handleDeleteClick = () => {
-    isAuthors
-      ? dispatch(deleteAuthors(selected))
-      : isGenres
-      ? dispatch(deleteGenres(selected))
-      : isTracks && dispatch(deleteTracks(selected));
+    if (isAuthors) {
+      dispatch(deleteAuthors(selected));
+    } else if (isGenres) {
+      dispatch(deleteGenres(selected));
+    } else if (isTracks) {
+      dispatch(deleteTracks(selected));
+    } else if (isUsers) {
+      dispatch(deleteUserPlaylist(userORalbumID, selected.id));
+    } else if (isAlbums) {
+      dispatch(deleteAlbumTrack(userORalbumID, selected.id));
+    }
     handleShowConfirmModal([]);
   };
 
   const deleteText = () => {
-    return isGenres ? "жанр(ы)" : isAuthors ? "автора(ов)" : "трек(и)";
+    if (isGenres) {
+      return "жанр(ы)";
+    } else if (isAuthors) {
+      return "автора(ов)";
+    } else if (isTracks) {
+      return "трек(и)";
+    } else if (isUsers) {
+      return "плейлист";
+    } else if (isAlbums) {
+      return "трек";
+    }
   };
   return (
     <Modal
       open={openModal}
       onClose={() => {
-        handleShowConfirmModal(selected);
+        isAlbums || isUsers
+          ? handleShowConfirmModal()
+          : handleShowConfirmModal(selected);
       }}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
@@ -89,7 +111,9 @@ export default function AdminConfirmModal({
             variant="contained"
             startIcon={<CancelIcon />}
             onClick={() => {
-              handleShowConfirmModal(selected);
+              isAlbums || isUsers
+                ? handleShowConfirmModal()
+                : handleShowConfirmModal(selected);
             }}
           >
             Отмена

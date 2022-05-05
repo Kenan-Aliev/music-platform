@@ -28,10 +28,12 @@ const apiRoutes = {
     },
     users_playlists: {
       getAll: "/playlist/getUsersPlaylists",
+      deletePlaylist: "/playlist/deletePlaylist",
     },
     albums: {
       getAll: "/album/getAll",
       new: "/album/new",
+      deleteTrackFromAlbum: "/album/delete",
     },
   },
   user: {

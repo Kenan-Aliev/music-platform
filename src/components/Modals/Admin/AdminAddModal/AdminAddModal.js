@@ -79,12 +79,11 @@ export default function AdminAddModal({
   const authors = useSelector((s) => s.authors.authors);
   const tracks = useSelector((s) => s.adminTracks.tracks);
 
-  console.log(selectedTracks);
   const getTracksAuthors = useMemo(() => {
     let tracksAuthors = [];
     for (let author of authors) {
       for (let t of tracks) {
-        if (author.id === t.author.id) {
+        if (author.id === t.author.id && !t.albumId) {
           tracksAuthors = [
             ...tracksAuthors,
             {

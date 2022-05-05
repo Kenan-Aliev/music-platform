@@ -11,7 +11,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
-import { addTrackToPlaylists } from "../../store/actions/userActions/playlistActions";
+import { addTrackToPlaylists } from "../../../../store/actions/userActions/playlistActions";
 
 const style = {
   position: "absolute",

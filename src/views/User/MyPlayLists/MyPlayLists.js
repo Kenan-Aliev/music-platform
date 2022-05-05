@@ -5,7 +5,7 @@ import MyButton from "../../../components/Button/Button";
 import PLayListsList from "./PLaylistsList/PLayListsList";
 import Container from "../../../components/Container/Container";
 import { getUserPlaylists } from "../../../store/actions/userActions/playlistActions";
-import UserPlaylistAddModal from "../../../components/UserPlaylistAddModal/UserPlaylistAddModal";
+import CreateNewPlaylistModal from "../../../components/Modals/User/CreateNewPlaylistModal/CreateNewPlaylistModal";
 import "./myPlaylists.css";
 
 function MyPlayLists() {
@@ -36,7 +36,7 @@ function MyPlayLists() {
             return <PLayListsList key={playlist.id} playlist={playlist} />;
           })}
         {openAddModal && (
-          <UserPlaylistAddModal
+          <CreateNewPlaylistModal
             openModal={openAddModal}
             handleShowModal={handleShowAddModal}
           />

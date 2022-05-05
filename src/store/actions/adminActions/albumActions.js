@@ -8,6 +8,9 @@ import {
   addNewAlbumFailed,
   addNewAlbumLoading,
   addNewAlbumSuccess,
+  deleteTrackFromAlbumFailed,
+  deleteTrackFromAlbumLoading,
+  deleteTrackFromAlbumSuccess,
 } from "../../reducers/adminReducers/albumReducers";
 import { logoutSuccess } from "../../reducers/authReducer";
 
@@ -33,7 +36,7 @@ export const addNewAlbum = (albumData) => {
     dispatch(addNewAlbumLoading());
     try {
       const response = await $api.post(apiRoutes.admin.albums.new, albumData);
-      dispatch(getAllAlbumsSuccess(response.data));
+      dispatch(addNewAlbumSuccess(response.data));
       toast.success(response.data.message);
     } catch (err) {
       if (err.response.status === 401) {
@@ -41,6 +44,26 @@ export const addNewAlbum = (albumData) => {
         localStorage.removeItem("token");
       }
       dispatch(addNewAlbumFailed(err.response.data));
+      toast.error(err.response.data.message);
+    }
+  };
+};
+
+export const deleteAlbumTrack = (albumId, trackId) => {
+  return async (dispatch) => {
+    dispatch(deleteTrackFromAlbumLoading());
+    try {
+      const response = await $api.delete(
+        `${apiRoutes.admin.albums.deleteTrackFromAlbum}/${albumId}/${trackId}`
+      );
+      dispatch(deleteTrackFromAlbumSuccess(response.data));
+      toast.success(response.data.message);
+    } catch (err) {
+      if (err.response.status === 401) {
+        dispatch(logoutSuccess(err.response.data));
+        localStorage.removeItem("token");
+      }
+      dispatch(deleteTrackFromAlbumFailed(err.response.data));
       toast.error(err.response.data.message);
     }
   };

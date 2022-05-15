@@ -83,7 +83,7 @@ const albumsReducer = (state = initialState, action) => {
           failed: false,
           message: action.payload.message,
         },
-        albums: action.payload.albums,
+        albums: [...state.albums,action.payload.album],
       };
     case ADD_NEW_ALBUM_FAILED:
       return {

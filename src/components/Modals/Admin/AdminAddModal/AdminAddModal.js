@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
-import Button from "../../components/Button/Button";
+import Button from "../../../Button/Button";
 import TextField from "@mui/material/TextField";
 import Modal from "@mui/material/Modal";
 import AddIcon from "@mui/icons-material/Add";
@@ -16,10 +16,10 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Stack from "@mui/material/Stack";
 import OutlinedInput from "@mui/material/OutlinedInput";
-import { addNewGenre } from "../../store/actions/adminActions/genresActions";
-import { addNewAuthor } from "../../store/actions/adminActions/authorActions";
-import { addNewTrack } from "../../store/actions/adminActions/trackActions";
-import { addNewAlbum } from "../../store/actions/adminActions/albumActions";
+import { addNewGenre } from "../../../../store/actions/adminActions/genresActions";
+import { addNewAuthor } from "../../../../store/actions/adminActions/authorActions";
+import { addNewTrack } from "../../../../store/actions/adminActions/trackActions";
+import { addNewAlbum } from "../../../../store/actions/adminActions/albumActions";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -78,12 +78,12 @@ export default function AdminAddModal({
   const genres = useSelector((s) => s.genres.genres);
   const authors = useSelector((s) => s.authors.authors);
   const tracks = useSelector((s) => s.adminTracks.tracks);
-
+  const albums = useSelector((s) => s.albums.albums);
   const getTracksAuthors = useMemo(() => {
     let tracksAuthors = [];
     for (let author of authors) {
       for (let t of tracks) {
-        if (author.id === t.author.id && !t.albumId) {
+        if (author.id === t.author.id) {
           tracksAuthors = [
             ...tracksAuthors,
             {
@@ -95,11 +95,16 @@ export default function AdminAddModal({
         }
       }
     }
+    for (let album of albums) {
+      for (let t of album.tracks) {
+        tracksAuthors = tracksAuthors.filter((track) => track.id !== t.id);
+      }
+    }
     tracksAuthors.sort((a, b) => {
       return a["trackName"] - b["trackName"];
     });
     return tracksAuthors;
-  }, [authors, tracks]);
+  }, [authors, tracks, albums]);
 
   const handleTrackDataChange = (event) => {
     setTrackData({ ...trackData, [event.target.name]: event.target.value });

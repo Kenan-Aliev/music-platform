@@ -1,4 +1,5 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -155,8 +156,6 @@ function EnhancedTableHead(props) {
   );
 }
 
-
-
 const EnhancedTableToolbar = (props) => {
   const { numSelected } = props;
   const { title } = props;
@@ -210,8 +209,6 @@ const EnhancedTableToolbar = (props) => {
   );
 };
 
-
-
 export default function EnhancedTable({
   title,
   data,
@@ -227,6 +224,7 @@ export default function EnhancedTable({
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const ref = React.useRef();
+  
   ref.current = isTracks
     ? data.map((track) => {
         return {
@@ -238,6 +236,9 @@ export default function EnhancedTable({
       })
     : data;
 
+    useEffect(()=>{
+
+    },[])
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");

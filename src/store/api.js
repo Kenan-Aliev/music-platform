@@ -9,6 +9,7 @@ const apiRoutes = {
   },
   tracks: {
     getAll: `${rootApi}/track/getAll`,
+    search: `${rootApi}/track/search`,
   },
   admin: {
     genres: {

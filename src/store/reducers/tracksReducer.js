@@ -2,6 +2,10 @@
 const GET_TRACKS_LOADING = "GET_TRACKS_LOADING";
 const GET_TRACKS_SUCCESS = "GET_TRACKS_SUCCESS";
 const GET_TRACKS_FAILED = "GET_TRACKS_FAILED";
+const SEARCH_TRACKS_LOADING = "SEARCH_TRACKS_LOADING";
+const SEARCH_TRACKS_SUCCESS = "SEARCH_TRACKS_SUCCESS";
+const SEARCH_TRACKS_FAILED = "SEARCH_TRACKS_FAILED";
+const RESET_SEARCH_TRACKS = "RESET_SEARCH_TRACKS";
 
 const initialState = {
   getTracks: {
@@ -10,7 +14,14 @@ const initialState = {
     failed: false,
     message: "",
   },
+  searchTracks: {
+    success: false,
+    loading: false,
+    failed: false,
+    message: "",
+  },
   tracks: [],
+  searchedTracks: [],
 };
 
 const trackReducer = (state = initialState, action) => {
@@ -46,7 +57,48 @@ const trackReducer = (state = initialState, action) => {
           message: action.payload.message,
         },
       };
-
+    case SEARCH_TRACKS_LOADING:
+      return {
+        ...state,
+        searchTracks: {
+          success: false,
+          loading: true,
+          failed: false,
+          message: "",
+        },
+      };
+    case SEARCH_TRACKS_SUCCESS:
+      return {
+        ...state,
+        searchTracks: {
+          success: true,
+          loading: false,
+          failed: false,
+          message: action.payload.message,
+        },
+        searchedTracks: action.payload.tracks,
+      };
+    case SEARCH_TRACKS_FAILED:
+      return {
+        ...state,
+        searchTracks: {
+          success: false,
+          loading: false,
+          failed: true,
+          message: action.payload.message,
+        },
+      };
+    case RESET_SEARCH_TRACKS:
+      return {
+        ...state,
+        searchTracks: {
+          success: false,
+          loading: false,
+          failed: false,
+          message: "",
+        },
+        searchedTracks: [],
+      };
     default:
       return state;
   }
@@ -64,5 +116,19 @@ export const getTracksFailed = (payload) => ({
   type: GET_TRACKS_FAILED,
   payload,
 });
+
+export const searchTracksLoading = () => ({ type: SEARCH_TRACKS_LOADING });
+
+export const searchTracksSuccess = (payload) => ({
+  type: SEARCH_TRACKS_SUCCESS,
+  payload,
+});
+
+export const searchTracksFailed = (payload) => ({
+  type: SEARCH_TRACKS_FAILED,
+  payload,
+});
+
+export const resetSearchTracks = () => ({ type: RESET_SEARCH_TRACKS });
 
 export default trackReducer;

@@ -7,7 +7,7 @@ import { getAllGenres } from "../../../store/actions/adminActions/genresActions"
 import { getAllTracks } from "../../../store/actions/adminActions/trackActions";
 import Button from "../../../components/Button/Button";
 import Container from "../../../components/Container/Container";
-import AdminAddModal from "../../../components/AdminAddModal/AdminAddModal";
+import AdminAddModal from "../../../components/Modals/Admin/AdminAddModal/AdminAddModal";
 import "./editPage.css";
 import AdminConfirmModal from "../../../components/Modals/Admin/AdminConfirmModal/AdminConfirmModal";
 import AdminTableWithSubComponents from "../../../components/AdminTableWithSubComponents/AdminTableWithSubComponents";

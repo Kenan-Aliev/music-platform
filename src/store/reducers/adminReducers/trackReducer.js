@@ -86,7 +86,7 @@ const tracksReducer = (state = initialState, action) => {
           failed: false,
           message: action.payload.message,
         },
-        tracks: action.payload.tracks,
+        tracks: [...state.tracks, action.payload.newTrack],
       };
     case ADD_NEW_TRACK_FAILED:
       return {

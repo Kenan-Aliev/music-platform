@@ -68,7 +68,11 @@ export default function AdminAddModal({
 }) {
   const theme = useTheme();
   const [inputValue, setInputValue] = useState("");
-  const [trackData, setTrackData] = useState({ genre: "", author: "" });
+  const [trackData, setTrackData] = useState({
+    genre: "",
+    author: "",
+    audioFile: {},
+  });
   const [albumData, setAlbumData] = useState({
     year: new Date(),
     authorId: "",
@@ -122,19 +126,23 @@ export default function AdminAddModal({
       typeof value === "string" ? value.split(",") : value
     );
   };
+
+  const handleChooseFile = (e) => {
+    setTrackData({ ...trackData, audioFile: e.target.files[0] });
+  };
+
   const handleBtnClick = () => {
     if (isGenres) {
       dispatch(addNewGenre(inputValue));
     } else if (isAuthors) {
       dispatch(addNewAuthor(inputValue));
     } else if (isTracks) {
-      dispatch(
-        addNewTrack({
-          name: inputValue,
-          authorId: trackData.author,
-          genreId: trackData.genre,
-        })
-      );
+      const formData = new FormData();
+      formData.append("name", inputValue);
+      formData.append("audio", trackData.audioFile);
+      formData.append("authorId", trackData.author);
+      formData.append("genreId", trackData.genre);
+      dispatch(addNewTrack(formData));
     } else if (isAlbums) {
       dispatch(
         addNewAlbum({
@@ -212,6 +220,12 @@ export default function AdminAddModal({
         />
         {isTracks ? (
           <Box sx={{ width: "70%" }}>
+            <TextField
+              onChange={handleChooseFile}
+              type={"file"}
+              sx={{ marginTop: "15px" }}
+              accept="audio/mpeg"
+            />
             <FormControl fullWidth sx={{ marginTop: "15px" }}>
               <InputLabel id="demo-simple-select-label">
                 Выберите жанр

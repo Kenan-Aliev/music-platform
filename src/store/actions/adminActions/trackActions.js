@@ -32,7 +32,9 @@ export const addNewTrack = (trackData) => {
   return async (dispatch) => {
     dispatch(addNewTrackLoading());
     try {
-      const tracks = await $api.post(apiRoutes.admin.tracks.new, trackData);
+      const tracks = await $api.post(apiRoutes.admin.tracks.new, trackData,{
+        
+      });
       dispatch(addNewTrackSuccess(tracks.data));
       toast.success(tracks.data.message);
     } catch (err) {

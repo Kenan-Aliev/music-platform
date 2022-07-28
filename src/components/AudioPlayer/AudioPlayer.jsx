@@ -10,7 +10,7 @@ const AudioPlayer = ({ tracks }) => {
   // State
   const [trackProgress, setTrackProgress] = useState(0);
   const activeTrack = useSelector((s) => s.tracks.activeTrack);
-  const { trackIndex, isPlaying } = activeTrack;
+  const { trackIndex, isPlaying,trackName:activeTrackName } = activeTrack;
   // Destructure for conciseness
   const {
     name: trackName,
@@ -126,6 +126,7 @@ const AudioPlayer = ({ tracks }) => {
 
   // Handles cleanup and setup when changing tracks
   useEffect(() => {
+    console.log("hi");
     audioRef.current.pause();
     audioRef.current = new Audio(`${rootApi}/${audioName}`);
     setTrackProgress(audioRef.current.currentTime);
@@ -138,7 +139,7 @@ const AudioPlayer = ({ tracks }) => {
       // Set the isReady ref as true for the next pass
       isReady.current = true;
     }
-  }, [trackIndex]);
+  }, [trackIndex,activeTrackName]);
 
   useEffect(() => {
     // Pause and clean up on unmount

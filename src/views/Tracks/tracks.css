@@ -2,6 +2,10 @@
   margin-top: 15vh;
 }
 
+.tracks_mt {
+  margin-top: 20vh;
+}
+
 .tracks .container {
   width: 40%;
 }
@@ -37,8 +41,23 @@
   color: white;
 }
 
-.track__img{
+.track__img {
   position: relative;
 }
 
-
+@media (max-width: 600px) {
+  h5 {
+    margin-top: 20px !important;
+  }
+  .tracks .container {
+    width: 90%;
+  }
+  .tracks {
+    margin-top: 25vh;
+  }
+  .track {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

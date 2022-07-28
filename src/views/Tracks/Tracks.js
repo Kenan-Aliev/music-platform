@@ -85,10 +85,7 @@ function Tracks({ isPlayList, isUserTracks }) {
   };
 
   return (
-    <div
-      className="tracks"
-      style={{ marginTop: isUserTracks || isPlayList ? "20vh" : "15vh" }}
-    >
+    <div className={`tracks ${isPlayList || isUserTracks ? "tracks_mt" : ""}`}>
       {!isUserTracks && !isPlayList && tracks.length > 0 && (
         <Button
           startIcon={<SearchOutlinedIcon />}

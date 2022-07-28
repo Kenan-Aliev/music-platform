@@ -68,3 +68,22 @@ input[type="range"] {
 /* .audio-controls path {
   fill: var(--white);
 } */
+
+@media (max-width: 600px) {
+  .audioPlayer {
+    max-width: 100vw;
+    height: 10vh;
+    padding: 0;
+    align-items: center;
+  }
+
+  .audioPlayer__TrackTitle {
+    margin-top: 7px;
+  }
+  .audioPlayer__trackInfo {
+    margin-left: 5px;
+  }
+  .audio-controls {
+    margin: 5px auto 0;
+  }
+}

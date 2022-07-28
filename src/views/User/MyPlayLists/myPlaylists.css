@@ -14,3 +14,9 @@ h1 {
   align-self: center;
   margin: auto;
 }
+
+@media (max-width: 600px) {
+  .userPlaylists {
+    margin-top: 20vh;
+  }
+}

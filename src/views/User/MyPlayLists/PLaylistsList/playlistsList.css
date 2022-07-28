@@ -19,3 +19,9 @@
   font-weight: bold;
   color: #1976d2;
 }
+
+@media (max-width: 600px) {
+  .playlistItem {
+    width: 100%;
+  }
+}

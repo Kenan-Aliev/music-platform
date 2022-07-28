@@ -33,15 +33,19 @@ export default function TracksSearchoModal({
 
   const handleClose = (event, reason) => {
     if (reason === "search") {
-      dispatch(searchTracks(searchData));
-      handleIsSearchDataEmpty(
-        !Object.values(searchData).some((value) => {
+      if (
+        Object.values(searchData).some((value) => {
           if (value) {
             return true;
           }
           return false;
-        })
-      );
+        }) === true
+      ) {
+        dispatch(searchTracks(searchData));
+        handleIsSearchDataEmpty(false);
+      } else {
+        handleIsSearchDataEmpty(true);
+      }
     }
     handleClickOpen();
   };

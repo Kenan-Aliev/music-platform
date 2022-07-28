@@ -12,6 +12,9 @@ import { toast } from "react-toastify";
 import { addNewMusicToTrackList } from "../../store/actions/userActions/trackActions";
 import { deleteTrackFromTrackList } from "../../store/actions/userActions/trackActions";
 import { deleteTrackFromPlaylist } from "../../store/actions/userActions/playlistActions";
+import { setActiveTrack } from "../../store/reducers/tracksReducer";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import PauseIcon from "@mui/icons-material/Pause";
 
 const commonOptions = ["Добавить в мою музыку", "Добавить в плейлист"];
 const userTrackListOptions = ["Удалить из моей музыки", "Добавить в плейлист"];
@@ -19,11 +22,20 @@ const playlistTracksOptions = ["Удалить из плейлиста"];
 
 const ITEM_HEIGHT = 48;
 
-function TrackList({ track, isPlayList, isUserTracks, userPlaylists }) {
+function TrackList({
+  isSearchedTracks,
+  track,
+  isPlayList,
+  isUserTracks,
+  userPlaylists,
+  trackIndex,
+}) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openModal, setOpenModal] = useState(false);
+  const [isMouseOver, setIsMouseOver] = useState(false);
   const isAuth = useSelector((s) => s.auth.login.success);
   const isAdmin = useSelector((s) => s.auth.user.isAdmin);
+  const activeTrack = useSelector((s) => s.tracks.activeTrack);
 
   const dispatch = useDispatch();
   const { playlistID } = useParams();
@@ -33,12 +45,26 @@ function TrackList({ track, isPlayList, isUserTracks, userPlaylists }) {
     setAnchorEl(event.currentTarget);
   };
 
+  const getActiveTrackArray = () => {
+    return isPlayList
+      ? "playlist"
+      : isUserTracks
+      ? "userTracks"
+      : isSearchedTracks
+      ? "allTracks"
+      : "searchedTracks";
+  };
+
   const setOptions = () => {
     return !isPlayList && !isUserTracks
       ? commonOptions
       : !isPlayList && isUserTracks
       ? userTrackListOptions
       : playlistTracksOptions;
+  };
+
+  const handleSetTrackActive = (track) => {
+    dispatch(setActiveTrack(track));
   };
 
   const handleClose = (option, trackId) => {
@@ -76,10 +102,60 @@ function TrackList({ track, isPlayList, isUserTracks, userPlaylists }) {
   };
 
   return (
-    <div className="track">
+    <div
+      className="track"
+      onMouseOver={() => setIsMouseOver(true)}
+      onMouseLeave={() => setIsMouseOver(false)}
+    >
       <div className="trackLeft">
         <div className="track__img">
           <AlbumIcon sx={{ color: "blue", fontSize: "60px" }} />
+          {isMouseOver &&
+            activeTrack.trackName === track.name &&
+            activeTrack.isPlaying && (
+              <PauseIcon
+                onClick={() => {
+                  const activetrack = {
+                    trackID: track.id,
+                    trackName: track.name,
+                    activeTrackArray: getActiveTrackArray(),
+                    trackIndex,
+                    isPlaying: false,
+                  };
+                  handleSetTrackActive(activetrack);
+                }}
+                sx={{
+                  position: "absolute",
+                  top: "15px",
+                  left: "16px",
+                  color: "white",
+                  fontSize: "30px",
+                }}
+              />
+            )}
+          {isMouseOver &&
+            (activeTrack.trackName !== track.name ||
+              !activeTrack.isPlaying) && (
+              <PlayArrowIcon
+                onClick={() => {
+                  const activeTrack = {
+                    trackID: track.id,
+                    trackName: track.name,
+                    activeTrackArray: getActiveTrackArray(),
+                    trackIndex,
+                    isPlaying: true,
+                  };
+                  handleSetTrackActive(activeTrack);
+                }}
+                sx={{
+                  position: "absolute",
+                  top: "15px",
+                  left: "16px",
+                  color: "white",
+                  fontSize: "30px",
+                }}
+              />
+            )}
         </div>
         <div className="track__info">
           <div className="track__name">{track.name}</div>

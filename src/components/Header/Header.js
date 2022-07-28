@@ -16,6 +16,7 @@ import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../store/actions/authActions";
+import AudioPlayer from "../AudioPlayer/AudioPlayer";
 
 const commonpages = ["Зарегистрироваться", "Войти"];
 const userPages = ["Мои песни", "Мои плейлисты"];
@@ -25,12 +26,27 @@ const settings = ["Главная", "Выйти"];
 function Header() {
   const isAuth = useSelector((s) => s.auth.login.success);
   const isAdmin = useSelector((s) => s.auth.user.isAdmin);
+  const activeTrack = useSelector((s) => s.tracks.activeTrack);
+  const audioPlayerIsActive = useSelector((s) => s.tracks.audioPlayerIsActive);
   const [activeLink, setActiveLink] = useState("");
   const user = useSelector((s) => s.auth.user);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const getActiveTrackArray = (s) => {
+    if (activeTrack.activeTrackArray === "playlist") {
+      return s.userPlaylists.playlistTracks;
+    } else if (activeTrack.activeTrackArray === "userTracks") {
+      return s.userTracks.myTracks;
+    } else if (activeTrack.activeTrackArray === "allTracks") {
+      return s.tracks.tracks;
+    } else if (activeTrack.activeTrackArray === "searchedTracks") {
+      return s.tracks.searchedTracks;
+    }
+  };
+
+  const tracks = useSelector((s) => getActiveTrackArray(s));
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -262,6 +278,9 @@ function Header() {
           </Toolbar>
         </Container>
       </AppBar>
+      {audioPlayerIsActive && tracks.length > 0 && (
+        <AudioPlayer tracks={tracks} />
+      )}
     </div>
   );
 }

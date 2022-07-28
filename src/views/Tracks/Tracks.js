@@ -50,10 +50,10 @@ function Tracks({ isPlayList, isUserTracks }) {
     if (isUserTracks) {
       dispatch(getMyTracks());
     }
-    return () => {
-      dispatch(resetSearchTracks());
-      console.log("hi");
-    };
+    // return () => {
+    //   dispatch(resetSearchTracks());
+    //   console.log("hi");
+    // };
   }, []);
 
   const handleClickOpen = () => {
@@ -85,7 +85,10 @@ function Tracks({ isPlayList, isUserTracks }) {
   };
 
   return (
-    <div className="tracks">
+    <div
+      className="tracks"
+      style={{ marginTop: isUserTracks || isPlayList ? "20vh" : "15vh" }}
+    >
       {!isUserTracks && !isPlayList && tracks.length > 0 && (
         <Button
           startIcon={<SearchOutlinedIcon />}
@@ -109,14 +112,19 @@ function Tracks({ isPlayList, isUserTracks }) {
           <>
             <Typography
               variant="h5"
-              sx={{ textAlign: "center", color: "blue" }}
+              sx={{
+                textAlign: "center",
+                color: "blue",
+              }}
             >
               {typographyText()}
             </Typography>
-            {getTracksArray().map((track) => {
+            {getTracksArray().map((track, index) => {
               return (
                 <TrackList
+                  isSearchedTracks={isSearchDataEmpty}
                   track={track}
+                  trackIndex={index}
                   key={track.id}
                   isPlayList={isPlayList}
                   isUserTracks={isUserTracks}

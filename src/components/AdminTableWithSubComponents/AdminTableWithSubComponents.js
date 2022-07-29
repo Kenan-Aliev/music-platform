@@ -16,6 +16,7 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import { visuallyHidden } from "@mui/utils";
 import TablePagination from "@mui/material/TablePagination";
 import SubTable from "./SubTable/SubTable";
+import AddIcon from "@mui/icons-material/Add";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -125,6 +126,17 @@ function Row(props) {
             {row.tracksCount}
           </TableCell>
         )}
+        {isAlbums && (
+          <TableCell>
+            <IconButton
+              aria-label="expand row"
+              size="small"
+              onClick={() => props.handleShowAddModal(row.id)}
+            >
+              <AddIcon />
+            </IconButton>
+          </TableCell>
+        )}
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -146,7 +158,12 @@ function Row(props) {
   );
 }
 
-export default function CollapsibleTable({ data, isAlbums, isUsers }) {
+export default function CollapsibleTable({
+  data,
+  isAlbums,
+  isUsers,
+  handleShowAddModal,
+}) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("email");
   const [page, setPage] = React.useState(0);
@@ -213,13 +230,19 @@ export default function CollapsibleTable({ data, isAlbums, isUsers }) {
                   </TableCell>
                 );
               })}
+              {isAlbums && <TableCell />}
             </TableRow>
           </TableHead>
           <TableBody>
             {stableSort(data, getComparator(order, orderBy))
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => (
-                <Row key={row.id} row={row} isAlbums={isAlbums} />
+                <Row
+                  key={row.id}
+                  row={row}
+                  isAlbums={isAlbums}
+                  handleShowAddModal={handleShowAddModal}
+                />
               ))}
             {emptyRows > 0 && (
               <TableRow

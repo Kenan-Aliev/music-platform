@@ -34,6 +34,7 @@ const apiRoutes = {
     albums: {
       getAll: "/album/getAll",
       new: "/album/new",
+      addNewTracksToAlbum:"album/addNewTracksToAlbum",
       deleteTrackFromAlbum: "/album/delete",
     },
   },

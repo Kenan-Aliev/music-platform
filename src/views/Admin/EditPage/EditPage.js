@@ -18,6 +18,7 @@ function EditPage({ title, isGenres, isUsers, isAuthors, isTracks, isAlbums }) {
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
   const [selected, setSelected] = useState([]);
+  const [addTracksAlbumID, setAddTracksAlbumID] = useState(0);
   const dispatch = useDispatch();
 
   const getData = (store) => {
@@ -58,9 +59,22 @@ function EditPage({ title, isGenres, isUsers, isAuthors, isTracks, isAlbums }) {
     };
   }, [isGenres, isUsers, isAuthors, isTracks, isAlbums, dispatch]);
 
-  const handleShowAddModal = () => {
+  const handleShowAddModal = (albumId = null) => {
     setOpenAddModal(!openAddModal);
+    if (albumId && typeof albumId === "number") {
+      setAddTracksAlbumID(albumId);
+    } else if (addTracksAlbumID !== 0) {
+      setAddTracksAlbumID(0);
+    }
   };
+
+  const getAddTracksObj = (selectedTracks) => {
+    return {
+      albumID: addTracksAlbumID,
+      tracks: selectedTracks,
+    };
+  };
+
   const handleShowConfirmModal = (items) => {
     setOpenConfirmModal(!openConfirmModal);
     setSelected(items);
@@ -105,10 +119,13 @@ function EditPage({ title, isGenres, isUsers, isAuthors, isTracks, isAlbums }) {
             data={data}
             isAlbums={isAlbums}
             isUsers={isUsers}
+            handleShowAddModal={handleShowAddModal}
           />
         )}
         {openAddModal && (
           <AdminAddModal
+            getAddTracksObj={getAddTracksObj}
+            isAddTracksToAlbum={addTracksAlbumID !== 0}
             isGenres={isGenres}
             isAuthors={isAuthors}
             isTracks={isTracks}

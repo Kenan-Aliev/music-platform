@@ -5,6 +5,9 @@ const GET_ALL_ALBUMS_FAILED = "GET_ALL_ALBUMS_FAILED";
 const ADD_NEW_ALBUM_LOADING = "ADD_NEW_ALBUM_LOADING";
 const ADD_NEW_ALBUM_SUCCESS = "ADD_NEW_ALBUM_SUCCESS";
 const ADD_NEW_ALBUM_FAILED = "ADD_NEW_ALBUM_FAILED";
+const ADD_NEW_TRACKS_TO_ALBUM_LOADING = "ADD_NEW_TRACKS_TO_ALBUM_LOADING";
+const ADD_NEW_TRACKS_TO_ALBUM_SUCCESS = "ADD_NEW_TRACKS_TO_ALBUM_SUCCESS";
+const ADD_NEW_TRACKS_TO_ALBUM_FAILED = "ADD_NEW_TRACKS_TO_ALBUM_FAILED";
 const DELETE_TRACK_FROM_ALBUM_LOADING = "DELETE_TRACK_FROM_ALBUM_LOADING";
 const DELETE_TRACK_FROM_ALBUM_SUCCESS = "DELETE_TRACK_FROM_ALBUM_SUCCESS";
 const DELETE_TRACK_FROM_ALBUM_FAILED = "DELETE_TRACK_FROM_ALBUM_FAILED";
@@ -17,6 +20,12 @@ const initialState = {
     message: "",
   },
   addNewAlbum: {
+    success: false,
+    loading: false,
+    failed: false,
+    message: "",
+  },
+  addNewTracksToAlbum: {
     success: false,
     loading: false,
     failed: false,
@@ -83,12 +92,46 @@ const albumsReducer = (state = initialState, action) => {
           failed: false,
           message: action.payload.message,
         },
-        albums: [...state.albums,action.payload.album],
+        albums: [...state.albums, action.payload.album],
       };
     case ADD_NEW_ALBUM_FAILED:
       return {
         ...state,
         addNewAlbum: {
+          success: false,
+          loading: false,
+          failed: true,
+          message: action.payload.message,
+        },
+      };
+    case ADD_NEW_TRACKS_TO_ALBUM_LOADING:
+      return {
+        ...state,
+        addNewTracksToAlbum: {
+          success: false,
+          loading: true,
+          failed: false,
+          message: "",
+        },
+      };
+    case ADD_NEW_TRACKS_TO_ALBUM_SUCCESS:
+      return {
+        ...state,
+        addNewTracksToAlbum: {
+          success: true,
+          loading: false,
+          failed: false,
+          message: action.payload.message,
+        },
+        albums: state.albums.map((a) => {
+          return a.id === action.payload.album.id ? action.payload.album : a;
+        }),
+      };
+
+    case ADD_NEW_TRACKS_TO_ALBUM_FAILED:
+      return {
+        ...state,
+        addNewTracksToAlbum: {
           success: false,
           loading: false,
           failed: true,
@@ -156,6 +199,20 @@ export const addNewAlbumSuccess = (payload) => ({
 
 export const addNewAlbumFailed = (payload) => ({
   type: ADD_NEW_ALBUM_FAILED,
+  payload,
+});
+
+export const addNewTracksToAlbumLoaading = () => ({
+  type: ADD_NEW_TRACKS_TO_ALBUM_LOADING,
+});
+
+export const addNewTracksToAlbumSuccess = (payload) => ({
+  type: ADD_NEW_TRACKS_TO_ALBUM_SUCCESS,
+  payload,
+});
+
+export const addNewTracksToAlbumFailed = (payload) => ({
+  type: ADD_NEW_TRACKS_TO_ALBUM_FAILED,
   payload,
 });
 

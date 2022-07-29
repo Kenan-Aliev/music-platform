@@ -20,6 +20,7 @@ import { addNewGenre } from "../../../../store/actions/adminActions/genresAction
 import { addNewAuthor } from "../../../../store/actions/adminActions/authorActions";
 import { addNewTrack } from "../../../../store/actions/adminActions/trackActions";
 import { addNewAlbum } from "../../../../store/actions/adminActions/albumActions";
+import { addNewTracksToAlbum } from "../../../../store/actions/adminActions/albumActions";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -60,6 +61,8 @@ const style = {
 
 export default function AdminAddModal({
   openModal,
+  getAddTracksObj,
+  isAddTracksToAlbum,
   handleShowModal,
   isGenres,
   isAuthors,
@@ -143,7 +146,7 @@ export default function AdminAddModal({
       formData.append("authorId", trackData.author);
       formData.append("genreId", trackData.genre);
       dispatch(addNewTrack(formData));
-    } else if (isAlbums) {
+    } else if (isAlbums && !isAddTracksToAlbum) {
       dispatch(
         addNewAlbum({
           name: inputValue,
@@ -152,6 +155,8 @@ export default function AdminAddModal({
           tracks: selectedTracks,
         })
       );
+    } else if (isAlbums && isAddTracksToAlbum) {
+      dispatch(addNewTracksToAlbum(getAddTracksObj(selectedTracks)));
     }
     handleShowModal();
   };
@@ -174,6 +179,9 @@ export default function AdminAddModal({
     } else if (isTracks) {
       return "Создать новый трек";
     } else if (isAlbums) {
+      if (isAddTracksToAlbum) {
+        return "Добавить треки к альбому";
+      }
       return "Создать новый альбом";
     } else if (isGenres) {
       return "Создать новый жанр";
@@ -189,6 +197,9 @@ export default function AdminAddModal({
         !trackData.genre
       );
     } else if (isAlbums) {
+      if (isAddTracksToAlbum) {
+        return !selectedTracks.length;
+      }
       return (
         !inputValue ||
         inputValue.length < 3 ||
@@ -208,16 +219,18 @@ export default function AdminAddModal({
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        <TextField
-          id="standard-required"
-          sx={{ width: "70%" }}
-          label={`Введите ${getInputLabel()}`}
-          variant="standard"
-          value={inputValue}
-          onChange={(e) => {
-            setInputValue(e.target.value);
-          }}
-        />
+        {!isAddTracksToAlbum && (
+          <TextField
+            id="standard-required"
+            sx={{ width: "70%" }}
+            label={`Введите ${getInputLabel()}`}
+            variant="standard"
+            value={inputValue}
+            onChange={(e) => {
+              setInputValue(e.target.value);
+            }}
+          />
+        )}
         {isTracks ? (
           <Box sx={{ width: "70%" }}>
             <TextField
@@ -308,45 +321,49 @@ export default function AdminAddModal({
                   ))}
                 </Select>
               </FormControl>
-              <FormControl
-                fullWidth
-                sx={{ marginTop: "20px", marginBottom: "20px" }}
-              >
-                <InputLabel id="demo-simple-select-label">
-                  Выберите исполнителя
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={albumData.authorId}
-                  name="authorId"
-                  label="Выберите исполнителя"
-                  onChange={handleAlbumDataChange}
+              {!isAddTracksToAlbum && (
+                <FormControl
+                  fullWidth
+                  sx={{ marginTop: "20px", marginBottom: "20px" }}
                 >
-                  {authors.map((author) => {
-                    return (
-                      <MenuItem key={author.id} value={author.id}>
-                        {author.name}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <Stack spacing={3}>
-                  <DatePicker
-                    views={["year"]}
-                    label="Год выпуска альбома"
-                    value={albumData.year}
-                    onChange={(newValue) => {
-                      setAlbumData({ ...albumData, year: newValue });
-                    }}
-                    renderInput={(params) => (
-                      <TextField {...params} helperText={null} />
-                    )}
-                  />
-                </Stack>
-              </LocalizationProvider>
+                  <InputLabel id="demo-simple-select-label">
+                    Выберите исполнителя
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={albumData.authorId}
+                    name="authorId"
+                    label="Выберите исполнителя"
+                    onChange={handleAlbumDataChange}
+                  >
+                    {authors.map((author) => {
+                      return (
+                        <MenuItem key={author.id} value={author.id}>
+                          {author.name}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+              )}
+              {!isAddTracksToAlbum && (
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <Stack spacing={3}>
+                    <DatePicker
+                      views={["year"]}
+                      label="Год выпуска альбома"
+                      value={albumData.year}
+                      onChange={(newValue) => {
+                        setAlbumData({ ...albumData, year: newValue });
+                      }}
+                      renderInput={(params) => (
+                        <TextField {...params} helperText={null} />
+                      )}
+                    />
+                  </Stack>
+                </LocalizationProvider>
+              )}
             </Box>
           )
         )}

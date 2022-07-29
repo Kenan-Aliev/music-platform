@@ -8,6 +8,9 @@ import {
   addNewAlbumFailed,
   addNewAlbumLoading,
   addNewAlbumSuccess,
+  addNewTracksToAlbumFailed,
+  addNewTracksToAlbumLoaading,
+  addNewTracksToAlbumSuccess,
   deleteTrackFromAlbumFailed,
   deleteTrackFromAlbumLoading,
   deleteTrackFromAlbumSuccess,
@@ -44,6 +47,27 @@ export const addNewAlbum = (albumData) => {
         localStorage.removeItem("token");
       }
       dispatch(addNewAlbumFailed(err.response.data));
+      toast.error(err.response.data.message);
+    }
+  };
+};
+
+export const addNewTracksToAlbum = (data) => {
+  return async (dispatch) => {
+    dispatch(addNewAlbumLoading());
+    try {
+      const response = await $api.post(
+        apiRoutes.admin.albums.addNewTracksToAlbum,
+        data
+      );
+      dispatch(addNewTracksToAlbumSuccess(response.data));
+      toast.success(response.data.message);
+    } catch (err) {
+      if (err.response.status === 401) {
+        dispatch(logoutSuccess(err.response.data));
+        localStorage.removeItem("token");
+      }
+      dispatch(addNewTracksToAlbumFailed(err.response.data));
       toast.error(err.response.data.message);
     }
   };

@@ -1,4 +1,6 @@
-export const rootApi = "http://localhost:5000";
+export const rootApi =
+  "https://music-platform-react-nodejs.herokuapp.com" ||
+  "http://localhost:5000";
 
 const apiRoutes = {
   auth: {
@@ -34,7 +36,7 @@ const apiRoutes = {
     albums: {
       getAll: "/album/getAll",
       new: "/album/new",
-      addNewTracksToAlbum:"album/addNewTracksToAlbum",
+      addNewTracksToAlbum: "album/addNewTracksToAlbum",
       deleteTrackFromAlbum: "/album/delete",
     },
   },

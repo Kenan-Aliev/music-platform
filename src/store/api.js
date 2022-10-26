@@ -1,5 +1,5 @@
 export const rootApi =
-  // "https://music-platform-react-nodejs.herokuapp.com" ||
+  "https://music-platform-react-nodejs.herokuapp.com" ||
   "http://localhost:5000";
 
 const apiRoutes = {

@@ -7,6 +7,7 @@ const SEARCH_TRACKS_SUCCESS = "SEARCH_TRACKS_SUCCESS";
 const SEARCH_TRACKS_FAILED = "SEARCH_TRACKS_FAILED";
 const RESET_SEARCH_TRACKS = "RESET_SEARCH_TRACKS";
 const SET_ACTIVE_TRACK = "SET_ACTIVE_TRACK";
+const RESET_ACTIVE_TRACK = "RESET_ACTIVE_TRACK";
 
 const initialState = {
   getTracks: {
@@ -122,6 +123,18 @@ const trackReducer = (state = initialState, action) => {
         activeTrack: action.payload,
         audioPlayerIsActive: true,
       };
+    case RESET_ACTIVE_TRACK:
+      return {
+        ...state,
+        activeTrack: {
+          trackID: 0,
+          trackName: "",
+          activeTrackArray: "allTracks",
+          trackIndex: 0,
+          isPlaying: false,
+        },
+        audioPlayerIsActive: false,
+      };
     default:
       return state;
   }
@@ -156,6 +169,8 @@ export const setActiveTrack = (track) => ({
   type: SET_ACTIVE_TRACK,
   payload: track,
 });
+
+export const resetActiveTrack = () => ({ type: RESET_ACTIVE_TRACK });
 
 export const resetSearchTracks = () => ({ type: RESET_SEARCH_TRACKS });
 

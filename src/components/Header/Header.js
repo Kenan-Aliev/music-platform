@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./header.css";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -17,6 +17,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../store/actions/authActions";
 import AudioPlayer from "../AudioPlayer/AudioPlayer";
+import { resetActiveTrack } from "../../store/reducers/tracksReducer";
 
 const commonpages = ["Зарегистрироваться", "Войти"];
 const userPages = ["Мои песни", "Мои плейлисты"];
@@ -47,6 +48,12 @@ function Header() {
   };
 
   const tracks = useSelector((s) => getActiveTrackArray(s));
+
+  useEffect(() => {
+    if (tracks.length === 0) {
+      dispatch(resetActiveTrack());
+    }
+  }, [tracks.length, dispatch]);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
